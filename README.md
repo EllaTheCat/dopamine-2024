@@ -7,7 +7,7 @@ might as well let my alter-ego Ella the Cat put her marketing hat on to keep you
 
 ## What's in it for me, the developer?
 
-I was diagnosed with **Parkinson's Disease **(PD) back in 2014. I like messing with computers. I don't want
+I was diagnosed with **Parkinson's Disease** (PD) back in 2014. I like messing with computers. I don't want
 PD to stop me programming. I don't want people to think PD has made me stupid.
 
 The project is a working configuration for **Sway, a tiling window manager**. It is the capabilities of Sway
@@ -19,7 +19,7 @@ have direct access to 100 workspaces, and these can be scripted to show various 
 ## What's in it for you?
 
 Take whatever you want, but please give me attribution for my work and attribute others for
-theirs. Abide by the license is all you must do but be kind and considerate pkease. If this project
+theirs. Abide by the LICENSE is all you must do but be kind and considerate please. If this project
 helps you or someone you know in any way with accessibility or Parkinson's my imposter syndrome would
 like to know.
 
