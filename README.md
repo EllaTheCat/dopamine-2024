@@ -10,11 +10,12 @@ might as well let my alter-ego Ella the Cat put her marketing hat on to keep you
 I was diagnosed with **Parkinson's Disease** (PD) back in 2014. I like messing with computers. I don't want
 PD to stop me programming. I don't want people to think PD has made me stupid.
 
-The project is a working configuration for **Sway, a tiling window manager**. It is the capabilities of Sway
-that make it accessible. Sway automates window placement  so I need not, but more to the point, when PD
-tremor kicks in, I simply can't manipulate windows without sway or i3. I need my meds and a keyboard and
-automation. Autotiling is a third party program that decides which way to split Sway or i3 windows. I
-have direct access to 100 workspaces, and these can be scripted to show various apps or documents.
+The project is a working configuration for **Sway, a tiling window manager**. It is the capabilities of
+Sway that make it accessible. Sway automates window placement so I need not, but more to the point, when
+PD tremor kicks in, I simply can't manipulate windows without sway or i3. I need my meds and a keyboard
+and automation.  I have direct access to 100 workspaces, and these can be scripted to show various apps
+or documents.  [Autotiling](https://github.com/nwg-piotr/autotiling) is a third party program that
+decides which way to split Sway or i3 windows.
 
 ## What's in it for you?
 
@@ -28,25 +29,37 @@ like to know.
 - **Modifier-centric and mode-centric bindings on the same keys** so you use what works for you. For
     example my left hand uses modifiers, my right hand needs modes.
 
-- **100 workspaces with customisable and or scripted behaviours.** Example bash scripts for editor and
-    browser workspaces.
+- **WASD keyboard** The main keyboard provides three inverted-T cursor keypads for focusing a container, moving a
+    container, resizing a container. These can be mixed together, they can be used in default mode with
+    the Mod4 modifier,or unmodified in a Menu mode entered by the Menu key. The Menu key detrmines two
+    major modes, Menu Keys and More Menu Keys.
 
-- **Four status bars with dual monitor systems.** Yes you can show or hide them altogether or
-  individually. The two lower edge status bars are reserved for binding mode indicator and workspace
-  tags. The upper edge status bars include an ascii-art animated thermometer for monitoring CPUs, disk
-  usage and temperatures, status of helper programs, a clock.
+ **i3|sway keyboard** The WASD keyboard is more or less a simple rearrangement of the standard i3|sway
+   layout we have all invested in. I intend to make the i3|sway standard bindings available as an
+   alternative to WASD eventually. Note that with 100 instead of 10 workspaces (q.v.) the standard digit
+   bindings have had to go.
 
-- **3 tables of 100 user definable commands filled with examples ** : setting window opacity, scaling
+- **100 workspaces with customisable and or scripted behaviours** Example bash scripts for editor and
+    browser workspaces. To visit a workspace, press a dedicated key and then two digits, to move a
+    container, press a different dedicated key and two digits. Three more dedicated keys provide three
+    more tables.
+
+- **3 tables of 100 user definable commands filled with examples:** setting window opacity, scaling
   workspaces for when you're tired, a few TV channels, sway manpages, i3 user's guide, combi workspaces
   of app and browser, utilities such as getting app_id, shellcheck your scripts, put your phone in a
-  sway container, make a sway window bigger than  one screen for snazzy wallpaper, widescreen movies,3
+  sway container, make a sway window bigger than  one screen for snazzy wallpaper, widescreen movies,
   "total emacs immersion" or just doing your makeup.
 
-- **Startup.** A example copy of my startup config file to get things moving in the morning.
+- **Four status bars with dual monitor systems.** Yes, you can show or hide them altogether or
+  individually. The lower edge status bars are reserved for binding mode indicator and workspace
+  tabs. The upper edge status bars include an ascii-art animated thermometer for monitoring CPUs, disk
+  usage and temperatures, status of helper programs, a clock.
+
+-- **Startup.** A example copy of my startup config file to get things moving in the morning.
 Tunes. Email. Browsers with your preferred pages or folders preloaded. Emacs server and client per
 instance workspaces.
 
-- ** Shutdown**. A really simple and fast way to get away from the computer without subsequent worry
+- **Shutdown.**   A really simple and fast way to get away from the computer without subsequent worry
 that you've forgotten to do something.
 
 - **Online help framework.** I use framework in the industry standard adjectival sense, to mean half-finished,
@@ -54,17 +67,17 @@ ready to explain the obvious and no help at all with the obscure. Here's what's 
 
 - **Binding Mode Indicator**, a dark text on dazzling yellow background, that tells you that you're not in
 Kansas anymore, but in a non-default mode where keys do different things compared with their usual
-behaviour. Our correspondent Mr Jones the butcher reminds us DO NOT PANIC: First, if the UI freezes or
+behaviour. Our correspondent Mr Jones the butcher reminds us  **DO NOT PANIC**. First, if the UI freezes or
 keys go dead then your typo has put you in a surprise mode by mistake and second, that if you are not
-in default mode ** PRESS SPACE ** to get back there.
+in default mode **PRESS SPACE** to get back there.
 
 - The **green nagbar** that appears at the bottom edge of the screen at startup, whence it was called the
-Welcome baanner, but has since evolved so it can be hadden or shown on demand (Super + Shift +
+Welcome banner, but has since evolved so it can be hidden or shown on demand (Super + Shift +
 Escape|Caps). When visible, the green banner provides online help and request buttons operable by mouse.
 
 - **Help topics,** prefixed "about" cover an intro, modes, keys, menus, workspaces. They are shell scripts
 which load themselves as free form text to be displayed in Emacs, but could be Markdown or asciidoc as
-determined by the script shebang, ooh..
+determined by the script shebang.
 
 - **[context sensitive help]** is one button but what you see depends on the mode (binding state), so
 all modes can have relevant documentation displayed on demand,. Even if it is just the bindings code
@@ -78,23 +91,23 @@ reformatted, it's up to date.
 I developed this for my own use so have not been as hard on myself as I would be professionally. These
 are the things I have to do in the short term for this project to become shipshape.
 
-- **BREAKING NEWS** I'm putting stuff on github regardless.
+- **BREAKING NEWS** I'm putting stuff on github regardless. Manual backup makes me nervous.
 
 - **Comments in code** I was intending to put all documentation in the code as comments. I intend to
 purge it in favour of the green nagbar help topics.
 
-- **$HOME $USER**
-Fix numerous hardcoded  "/home/ellathecat" strings, with sway config variables and bash variables.
+- **$HOME $USER** Fix numerous hardcoded "/home/ellathecat" strings, with sway config variables and bash
+variables.
 
-- **ShellCheck Scripts**
-Every script to pass ShellCheck by hand. Automation not a shipshape requirement.
+- **ShellCheck Scripts** Every script to pass ShellCheck by hand. Automation not a shipshape
+requirement. Initial commit exempt.
 
-- **One Config Review **
-Concatenate all configs into one, strip comments and blank lines, insert file boundaries. Ask sway
-reddit how to run the nagbar validation on it.
+- **One Config Review** Concatenate all configs into one, strip comments and blank lines, insert file
+boundaries. Ask sway reddit how to run the nagbar validation on it.
 
-- **About Workspaces **
-All the help topics to have something of substance written.
+- **About Workspaces** All the help topics to have something of substance written. The workspace related
+topics need drafting.
 
-- **Context Help **
-Not a shipshape requirement beyond an empty document with the correct title.
+- **Context Help** Excepting Menu Keys and More Menu Keys modes, not a shipshape requirement beyond an
+empty document with the correct title for the current mode. **There has to be a WASD keyboard layout
+diagram** accessible (show|hide) via the keyboard for these two modes. Mod5+slash is reserved for this.
