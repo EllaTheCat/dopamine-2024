@@ -1,0 +1,23 @@
+#
+# .gitignore for github dopamine-2024 repo local folder ${HOME}/config/sway
+#
+
+# this is a symbolic link to the file config.d/000-includes made by hand
+config
+
+# the result of passing the markdown README.md through discount-makepage
+# so I don't need a markdown browser plugin. I installed it on fedora38.
+README.html
+
+# legacy boilerplate - ignore backups, crashes, etc
+config.d/#*
+config.d/.#*
+scripts.d/#*
+scripts.d/.#*
+
+# I used funny file extensions. 
+# These rules only allow .co* and .sc* extensions in config.d and scripts.d respectively. 
+config.d/*.[a-bd-z]*
+scripts.d/*.[a-rt-z]*
+config.d/*.c[a-np-z]*
+scripts.d/*.s[a-bd-z]*
