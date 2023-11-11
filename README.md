@@ -3,12 +3,12 @@
 
 This repository exists because my top priority is to get an offsite backup of my sway environment, and
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
-might as well let my alter-ego Ella the Cat put her marketing hat on to keep you interested.
+might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
-## What's in it for me, the developer?
+## What's in it for me?
 
-I was diagnosed with **Parkinson's Disease** (PD) back in 2014. I like messing with computers. I don't want
-PD to stop me programming. I don't want people to think PD has made me stupid.
+I was diagnosed with **Parkinson's Disease** (PD) back in 2014. I like messing with
+computers. I don't want PD to stop me programming. I don't want people to think PD has made me stupid.
 
 The project is a working configuration for **Sway, a tiling window manager**. It is the capabilities of
 Sway that make it accessible. Sway automates window placement so I need not, but more to the point, when
@@ -34,7 +34,7 @@ like to know.
     the Mod4 modifier,or unmodified in a Menu mode entered by the Menu key. The Menu key detrmines two
     major modes, Menu Keys and More Menu Keys.
 
- **i3|sway keyboard** The WASD keyboard is more or less a simple rearrangement of the standard i3|sway
+- **i3|sway keyboard** The WASD keyboard is more or less a simple rearrangement of the standard i3|sway
    layout we have all invested in. I intend to make the i3|sway standard bindings available as an
    alternative to WASD eventually. Note that with 100 instead of 10 workspaces (q.v.) the standard digit
    bindings have had to go.
@@ -55,7 +55,7 @@ like to know.
   tabs. The upper edge status bars include an ascii-art animated thermometer for monitoring CPUs, disk
   usage and temperatures, status of helper programs, a clock.
 
--- **Startup.** A example copy of my startup config file to get things moving in the morning.
+- **Startup.** A example copy of my startup configuration to get things moving in the morning.
 Tunes. Email. Browsers with your preferred pages or folders preloaded. Emacs server and client per
 instance workspaces.
 
@@ -71,27 +71,22 @@ behaviour. Our correspondent Mr Jones the butcher reminds us  **DO NOT PANIC**. 
 keys go dead then your typo has put you in a surprise mode by mistake and second, that if you are not
 in default mode **PRESS SPACE** to get back there.
 
-- The **green nagbar** that appears at the bottom edge of the screen at startup, whence it was called the
-Welcome banner, but has since evolved so it can be hidden or shown on demand (Super + Shift +
-Escape|Caps). When visible, the green banner provides online help and request buttons operable by mouse.
+- A **green nagbar** that appears at the bottom edge of the screen can be hidden or shown on demand with
+the binding Mod4+Shift+Caps. When visible, the green banner provides online help buttons operable by
+mouse, also reload and dismiss buttons as on the red nagbar, and finally an exit button.
 
 - **Help topics,** prefixed "about" cover an intro, modes, keys, menus, workspaces. They are shell scripts
 which load themselves as free form text to be displayed in Emacs, but could be Markdown or asciidoc as
 determined by the script shebang.
 
-- **[context sensitive help]** is one button but what you see depends on the mode (binding state), so
+- **context sensitive help** is one button but what you see depends on the mode (binding state), so
 all modes can have relevant documentation displayed on demand,. Even if it is just the bindings code
 reformatted, it's up to date.
-
-- The sway **reload button**, sway **exit button** and nagbar **dismiss button** are mouse buttons, so
-  you can't easily invoke them using the keyboard.
 
 ## Immediate Tasks
 
 I developed this for my own use so have not been as hard on myself as I would be professionally. These
 are the things I have to do in the short term for this project to become shipshape.
-
-- **BREAKING NEWS** I'm putting stuff on github regardless. Manual backup makes me nervous.
 
 - **Comments in code** I was intending to put all documentation in the code as comments. I intend to
 purge it in favour of the green nagbar help topics.
@@ -111,3 +106,9 @@ topics need drafting.
 - **Context Help** Excepting Menu Keys and More Menu Keys modes, not a shipshape requirement beyond an
 empty document with the correct title for the current mode. **There has to be a WASD keyboard layout
 diagram** accessible (show|hide) via the keyboard for these two modes. Mod5+slash is reserved for this.
+
+## About Us
+
+Ella was my pet cat and the inspiration for my not-at-work alter-ego EllaTheCat on github. She is also
+my presence as EllaTheCat on reddit as someone who is helpful but not afraid to show her claws. I'm Karl
+Wood, the one with PD.
