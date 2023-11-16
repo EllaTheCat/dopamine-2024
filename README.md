@@ -1,9 +1,20 @@
 # dopamine-2024 README.md
-## Status 08 November 2023
+## Status 16 November 2023
 
 This repository exists because my top priority is to get an offsite backup of my sway environment, and
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
+
+### Update 8 Nov to 16 Nov
+
+- Fedora 39 updated from 38. Good experience.  Thunar vs pcmanfm vs pcmanfm-qt as preferred file browser
+evaluation required. PD finger trouble, failure to properly execute drag 'n'drop , Accidentally emptied
+a 250Gbyte SSD. Confining myself to copy-paste and terminal in browser folders.
+
+- fedora 39 dark theme breakage. AdWaita-qt5 and -qt6 packages installed.
+- Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark qterminal looks OK.
+- Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark pcmanfm-qt looks OK.
+- qterminal is not unlike xfce4-terminal, may be better accepted.
 
 ## What's in it for me?
 
@@ -29,10 +40,10 @@ like to know.
 - **Modifier-centric and mode-centric bindings on the same keys** so you use what works for you. For
     example my left hand uses modifiers, my right hand needs modes.
 
-- **WASD keyboard** The main keyboard provides three inverted-T cursor keypads for focusing a container, moving a
-    container, resizing a container. These can be mixed together, they can be used in default mode with
-    the Mod4 modifier,or unmodified in a Menu mode entered by the Menu key. The Menu key detrmines two
-    major modes, Menu Keys and More Menu Keys.
+- **WASD keyboard** The main keyboard provides three inverted-T cursor keypads for focusing a container,
+    moving a container, resizing a container. These can be mixed together, they can be used in default
+    mode with the Mod4 modifier,or unmodified in a Menu mode entered by the Menu key. The Menu key
+    detrmines two major modes, Menu Keys and More Menu Keys.
 
 - **i3|sway keyboard** The WASD keyboard is more or less a simple rearrangement of the standard i3|sway
    layout we have all invested in. I intend to make the i3|sway standard bindings available as an
