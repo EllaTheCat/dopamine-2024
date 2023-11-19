@@ -1,0 +1,152 @@
+#!/bin/bash
+# rename_or_swap_workspaces.script
+# ------------------------------------------------------------------------------------------------------
+
+# A list specifies the old and new names of a workspace, then the workspace 'old' is renamed to 'new' if
+# 'new' does not exist, UNLESS swapping 'old' and 'new' satifies the name requirements. The 3rd list
+# iten specifies the output where the new workspace is to be moved; there may only be two but guessing
+# which one is hard, it's easier to be explicit.
+
+# Adapted from map-ws-to-op-menu.script----------------------------------------------------------------------------
+
+function move_workspace_to_output_helper
+{
+    # Make new the current workspace.
+    swaymsg "workspace number $1"
+    # Map output letter to output name. Do not insist on the colon being absent or present.
+    case "${2:0:1}" in
+        z)
+            swaymsg "move workspace to HDMI-A-2"
+            ;;
+        x)
+            swaymsg "move workspace to HDMI-A-1"
+            ;;
+        c)
+            swaymsg "move workspace to VGA-1"
+            ;;
+    esac
+}
+
+function rename_or_swap_ws
+{
+    # List the workspaces each on each output.
+    # --------------------------------------------------------------------------------------------------
+    # THESE ARE THE THREE LINES TO EDIT to use the names of your outputs:
+    z=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="HDMI-A-2").name')
+    x=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="HDMI-A-1").name')
+    c=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="VGA-1").name')
+    # --------------------------------------------------------------------------------------------------
+
+    list="cancel\nz:\n$z\nx:\n$x\nc:\n$c\n"
+    # Combine into a list of workspaces for all outputs, keeping the per output lists contiguous and
+    # headed by the output name. Put all this into a dmenu at the bottom, overlaying the workspace tabs.
+    # Note to self: beware trailing garbage characters in ${??ws}
+    wscount=0
+    old=
+    new=
+    op=
+    while [ $wscount -lt 3 ]
+    do
+        if [ $wscount -eq 0 ]; then
+            if [ "_$1" = "_NaN" ]; then
+                t="choose old workspace number: "
+                wsws=$(echo -e "${list/==/}" | rofi -dmenu -b -p "$t")
+            else
+                wsws=${1:0:2}
+            fi
+        fi
+        if [ $wscount -eq 1 ]; then
+            if [ "_$2" = "_NaN" ]; then
+                s="choose new workspace number: "
+                wsws=$(echo -e "${list/==/}" | rofi -dmenu -b -p "$s")
+            else
+                wsws=${2:0:2}
+            fi
+        fi
+        if [ $wscount -eq 2 ]; then
+            if [ "_$3" = "_NaN" ]; then
+                r="choose new workspace output z:HDMI-A-2 x:HDMI-A-1 c:VGA-1: "
+                wsws=$(echo -e "${list/==/}" | rofi -dmenu -b -p "$r")
+            else
+                wsws=${3:0:2}
+            fi
+        fi
+        echo "debug $wscount $wsws"
+        case "${wsws}" in
+            (cancel*|ca)
+                # Keep checking that this exits cleanly, endless loop bugs are a pain in the bum.
+                done=1
+                return
+                ;;
+            (*)
+                case "${wsws:0:2}" in
+                    ([0-9][0-9])
+                        if [ ${wscount} -eq 0 ]; then
+                            old="${wsws:0:2}"
+                            swaymsg "workspace number ${old}"
+                            wscount=1
+                        elif [ ${wscount} -eq 1 ]; then
+                            new="${wsws:0:2}"
+                            swaymsg "workspace number ${new}"
+                            wscount=2
+                        fi
+                        ;;
+                    (z:|x:|c:)
+                        if [ ${wscount} -eq 2 ]; then
+                            op="${wsws:0:2}"
+                            wscount=3
+                        fi
+                        ;;
+                    (*)
+                        # via the escape key
+                        done=1
+                        ;;
+                esac
+                ;;
+        esac
+        if [ $wscount -eq 3 ]; then
+            # does $old $new $op exist?
+            oldex=$(echo "$z $x $c" | grep -c "$old")
+            newex=$(echo "$z $x $c" | grep -c "$new")
+            echo "debug $wscount: $old $oldex $new $newex $op"
+            # do-while loop test is inside the loop hence the break.
+            case  "${newex}${oldex}" in
+                ?0)
+                    # no old workspace with a number.
+                    break
+                    ;;
+                01)
+                    # no such new workspace so we can rename the old workspace.
+                    swaymsg "rename workspace \"$old\" to \"$new\""
+                    sleep 1s
+                    move_workspace_to_output_helper "$new" "$op"
+                    break
+                    ;;
+                11)
+                    # old and new exist and swapping their names or contents satisfies the old renaming
+                    # requirement, although it's debatable that new must change its number accordingly.
+                    echo "debug "
+                    tmp=$new$old
+                    swaymsg "rename workspace \"$old\" to \"$tmp\""
+                    sleep 1s
+                    swaymsg "rename workspace \"$new\" to \"$old\""
+                    sleep 1s
+                    swaymsg "rename workspace \"$tmp\" to \"$new\""
+                    sleep 1s
+                    move_workspace_to_output_helper "$new" "$op"
+                    break
+                    ;;
+            esac
+        fi
+    done
+}
+
+#
+# Start here.
+#
+
+# Workspace arguments must be double-digit numbers, output must be z|x|c colon.
+rename_or_swap_ws "${1:-NaN}" "${2:-NaN}" "${3:-NaN}"
+#
+# Done
+#

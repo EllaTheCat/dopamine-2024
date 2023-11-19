@@ -1,0 +1,100 @@
+#!/bin/bash
+# emacs-workspace-setup.script
+# ------------------------------------------------------------------------------------------------------
+# Script arg $1 - username, $ USER to select the $USERfn function
+# Script arg $2 - server launch delay in seconds
+# Script arg $2 - interval between client launches in seconds
+# ------------------------------------------------------------------------------------------------------
+function ellathecatfn
+{
+    # Scripts can specify when to launch the server in order to avoid "pile-ups".
+    # delay0 = delay from invoke setup to invoke server.
+    case "$1" in
+        ([1-9][0-9]|[1-9])
+            delay0=$1
+            # Some scripts do the delay here, this script does not.
+            ;;
+        (*)
+            echo "bad arg1 launch delay  >$1< expect 1 to 99 seconds"
+            exit 1
+            ;;
+    esac
+    # Scripts can specify the expected times for server and client to go from invocation to
+    # readiness. The server will need longer than the client.
+    # delayS = server invoked to ready delay , delayC = client invoked to ready delay
+    case "${2}" in
+        ([1-9][0-9]:[1-9]|[0-9])
+            #
+            delayS=${2/:*/}
+            delayC=${2/*:/}
+            ;;
+        ([1-9][0-9]:[1-9])
+            #
+            delayS=${2/:*/}
+            delayC=${2/*:/}
+            ;;
+        ([1-9]:[10-99])
+            # for sake of completeness.
+            delayS=${2/:*/}
+            delayC=${2/*:/}
+            ;;
+        ([1-9]:[1-9])
+            # for sake of completeness
+            delayS=${2/:*/}
+            delayC=${2/*:/}
+            ;;
+        (*)
+            echo "bad arg2 >$2< expect server:client = 1 to 99 : 1 to 99"
+            exit 1
+            ;;
+    esac
+
+    # Subshell invocation delays
+    delay1=$(( delay0+delayS ))
+    delay2=$(( delay1+delayC ))
+    delay3=$(( delay2+delayC ))
+    delay4=$(( delay3+delayC ))
+    delay5=$(( delay4+delayC ))
+
+    # Start the server before the clients. 32 34 on left 31 33 35 on right gives interesting
+    # single press jumps with workspace prev/prev_on_output/next/next_on_output.
+    (sleep "${delay0}" && swaymsg "exec emacsserver-workspace.script 33:1" ) &
+    (sleep "${delay1}" && swaymsg "exec emacsclient-workspace.script 31:1" ) &
+    (sleep "${delay2}" && swaymsg "exec emacsclient-workspace.script 32:1" ) &
+    (sleep "${delay3}" && swaymsg "exec emacsclient-workspace.script 34:1" ) &
+    (sleep "${delay4}" && swaymsg "exec emacsclient-workspace.script 35:1" ) &
+    (sleep "${delay5}" && announce_emacs_is_ready ) &
+}
+
+#
+# Visit the emacs server workspace, show the bookmarks menu.
+#
+function announce_emacs_is_ready
+{
+    swaymsg "workspace --no-auto-back-and-forth number 33" ;
+    sleep 1s
+    # Emacs C-x r l show bookmarks list
+    # /usr/include/linux/input-events.h
+    sudo ydotool key 29:1 45:1 45:0 29:0 19:1 19:0 38:1 38:0
+}
+# ------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------------------------
+#
+# Start here.
+case "$1" in
+    (ellathecat)
+        ellathecatfn ${@:2}
+        ;;
+    (*)
+        speak-ng "Create your $USER case in $(basename $0)"
+        ;;
+esac
+
+# ------------------------------------------------------------------------------------------------------
+# It's much easier to bite the bullet, to write and debug a small script, than to write and debug
+# sway/i3 configuration language.
+# ------------------------------------------------------------------------------------------------------
+#
+# Done.
+#

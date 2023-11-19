@@ -1,0 +1,48 @@
+#!/bin/bash
+# Ensure that there is but a single instance of the running ydotool daemon.
+# ------------------------------------------------------------------------------------------------------
+# These values are for debug and test; in normal operation the script is called as early as possible
+# (see 000-includes) to be ready in time, and there's no point in bombing out on error, because it's
+# better to have a below-par config than no config. 119-status-bars.config calls statuscmd-000.script,
+# which activates the green YD:ON ydotoold status indicator on the left of the status bar
+#
+# exit status 0 = running
+# exit status 1 = stopped
+# exit status 2 = too many
+# exit status 3 = too many found
+# ------------------------------------------------------------------------------------------------------
+
+case "$(pgrep -c -f 'sudo /usr/bin/ydotoold')" in
+    (1)
+        # One instance already running, return ok status
+        exit 0
+        ;;
+    (0)
+        # Zero instances running, attempt to start one, return attempt status.
+        sudo /usr/bin/ydotoold &
+        sleep 3s
+        case "$(pgrep -c -f 'sudo /usr/bin/ydotoold')" in
+            (0)
+                exit 1
+                ;;
+            (1)
+                # One instance running, return ok status.
+                exit 0
+                ;;
+            (*)
+                exit 2
+                ;;
+        esac
+        ;;
+    (*)
+        # Too many instances running, attempt to stop all of them, return 'too many found' status.
+        sudo pkill -c -f 'sudo /usr/bin/ydotoold'
+        sudo killall ydotoold
+        exit 3
+        ;;
+esac
+
+# --------------------------------------------------------.----------------------------------------------
+#
+# Done.
+#

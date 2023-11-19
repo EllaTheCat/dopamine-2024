@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# Create one or two or three emacsclient frames so that thereafter the key binding that created them merely
+# visits the workspace.
+
+# ------------------------------------------------------------------------------
+debug=/tmp/debug
+echo '----' > $debug
+
+case "${2:-1}" in
+    (:[0-9][0-9]|:[0-9])
+        delay=${2/:/}
+        sleep $(delay)
+        ;;
+esac
+case "$1" in
+    ([0-9][0-9]:[0-9]|[0-9]:|[0-9])
+        ws=${1/:*}
+        swaymsg "workspace --no-auto-back-and-forth number $ws"
+        sleep 3s
+        maxinstances=${1/*:/}
+        echo "$ws $maxinstances" >> $debug
+        ;;
+    (*)
+        echo "bad arg[1] $ws $maxinstances" >> $debug
+        exit 1
+        ;;
+esac
+list=$(swaymsg -t get_workspaces -p | grep -A3 '\(focused\)')
+echo $list >> $debug
+represent=$(echo $list | grep Represent | sed 's/\(\[\|\]\)/\n/g')
+instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c 'Emacs')
+case "$maxinstances" in
+    (1|2|3|4|0)
+        echo "$instances of $maxinstances instances" >> $debug
+        ;;
+    (*)
+        echo "bad maxinstances $maxinstances"
+        exit 1
+        ;;
+esac
+echo "ready :)" >> $debug
+# --------------------------------------------------------------------------------------------------====
+count=$instances
+while true
+do
+    index=$(( maxinstances - count ))
+    echo "index $index" >> $debug
+    case "$index" in
+        (0)
+            echo "done :-)" >> $debug
+            exit 0
+            ;;
+        ([1-9])
+            #xe="exec emacsclient -c -e nil"
+            exe="exec gio launch /home/ellathecat/Desktop/emacs-client.desktop"
+            echo "launch emasclient[$index] $exe" >> $debug
+            swaymsg "$exe"
+            sleep 2s
+            # There may be more than one instance, number them 0,1,2.,,.
+            frame=$(( count - instances ))
+            echo "frame $frame " >> $debug
+            # ooh, ooh! i3 user's guide had this awesome function that preserves the dynamic Emacs title
+            # containing the filename and prepends the workspace and instance at the time of invocation.
+            swaymsg "title_format \"emacsclient workspace $ws frame $frame %title\""
+            # A mark holds the workspace and instance at the time of invocation. The title_format makes
+            # the mark redundant, retain it nevertheless.
+            swaymsg "mark --replace \"$ws$frame\""
+            # Sometimes apps start on another workspace.
+            swaymsg "move container to workspace $ws"
+            sleep 2s
+            ;;
+        (*)
+            exit 1
+            ;;
+    esac
+    # --------------------------------------------------------------------------------------------------
+    count=$(( count=count+1 ))
+    # --------------------------------------------------------------------------------------------------
+done
+# Success is case 0.
+exit 1
+
+# ------------------------------------------------------------------------------------------------------
+
+#
+# Done.
+#

@@ -1,0 +1,17 @@
+#!/bin/bash
+# desktop-workspace-setup.script
+# ------------------------------------------------------------------------------------------------------
+case "$1" in
+    (ellathecat)
+        delay=$2
+        (sleep ${delay} && desktop-workspace.script 10 /home/ellathecat/Desktop/vlc-flatpak.desktop 1s) &
+        (sleep ${delay} && desktop-workspace.script 11 /home/ellathecat/Desktop/pavucontrol.desktop 3s) &
+        (sleep ${delay} && desktop-workspace.script 18      /home/ellathecat/Desktop/bpytop.desktop 5s) &
+        ;;
+    (*)
+        speak-ng "Create your $USER case in $(basename $0)"
+        ;;
+esac
+#
+# Done.
+#

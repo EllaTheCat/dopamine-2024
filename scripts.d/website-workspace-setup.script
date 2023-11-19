@@ -1,0 +1,45 @@
+#!/bin/bash
+# website-workspace-setup.script
+# ------------------------------------------------------------------------------------------------------
+
+function ellathecatfn
+{
+    delayX=${2:=7}
+    delay1=${1:-12}
+    delay2=$(( delay1+delayX ))
+    delay3=$(( delay2+delayX ))
+    delay4=$(( delay3+delayX ))
+    delay5=$(( delay4+delayX ))
+    delay6=$(( delay5+delayX ))
+    delay7=$(( delay6+delayX ))
+    delay8=$(( delay7+delayX ))
+    delay9=$(( delay8+delayX ))
+
+    # Visit workspaces 1 through 9 inclusive, in ascending order at runtime, i.e. not necessarily in
+    # statement order. This function executes without blocking, leaving a bunch of expiring subshells.
+    (sleep ${delay9} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "10:1" "10:0" )&
+    (sleep ${delay8} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "9:1" "9:0" )&
+    (sleep ${delay7} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "8:1" "8:0" )&
+    (sleep ${delay6} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "7:1" "7:0" )&
+    (sleep ${delay5} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "6:1" "6:0" )&
+    (sleep ${delay4} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "5:1" "5:0" )&
+    (sleep ${delay3} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "4:1" "4:0" )&
+    (sleep ${delay2} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "3:1" "3:0" )&
+    (sleep ${delay1} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "2:1" "2:0" )&
+}
+
+#
+# Start here.
+#
+case "$1" in
+    (ellathecat)
+        ellathecatfn $2 $3
+        ;;
+    (*)
+        speak-ng "Create your $USER case in $(basename $0)"
+        ;;
+esac
+
+#
+# Done.
+#

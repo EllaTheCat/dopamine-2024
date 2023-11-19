@@ -1,0 +1,10 @@
+#!/bin/bash
+# dont fear the reaper
+
+# TODO unmark items on savelist
+
+speak-ng "don't fear the reaper"
+
+#
+# Done
+#

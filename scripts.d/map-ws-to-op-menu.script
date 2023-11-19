@@ -1,0 +1,95 @@
+#!/bin/bash
+# map-ws-2-op.script
+# Specify a workspace and an output, in either order, and the workspace moves to the output.
+# ------------------------------------------------------------------------------------------------------
+
+# This function is taken from a previous project. It shows you which workspaces are on which outputs
+# even when you can only see the workspace tabs on one output, as might be the case when you are using
+# the other outpot fullscreen or the other monitor is being driven from a set-top-box so you can watch
+# the football. You can move a workspace on each invocation. You can fit a hardware dongle to enable the
+# asociated output, and move workspaces in and out like a scratchpad.
+
+# ------------------------------------------------------------------------------------------------------
+# OUTPUT NMMES
+# (This needs your manual intervention.)
+# PLEASE EDIT HERE TO SUIT YOUR OUTPUT NAMES and also EDIT THE THREE LINES AT THE START OF FUNCTION
+# 'move_workspace_to_output_using_menu' TO USE YOUR OUTPUT NAMES.
+opz=HDMI-A-2
+opx=HDMI-A-1
+opc=VGA-1
+# ------------------------------------------------------------------------------------------------------
+
+function move_workspace_to_output_using_menu
+{
+    # List the workspaces each on each output.
+    # --------------------------------------------------------------------------------------------------
+    # THESE ARE THE THREE LINES TO EDIT to use the names of your outputs:
+    z=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="HDMI-A-2").name')
+    x=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="HDMI-A-1").name')
+    c=$(swaymsg -t get_workspaces | jq -r '.[] | select(.output=="VGA-1").name')
+    # --------------------------------------------------------------------------------------------------
+
+    # The objective is to specify both the output and the workspace to be moved to that output. This can be
+    # done in either order by selecting twice from the menu, but choosing the output before the workspace
+    # allows the user to specify a workspace already on the output. The listed outputs are marked by a colon
+    # suffix.
+    list="cancel\n${opz}:\n$z\n${opx}:\n$x\n${opc}:\n$c\n"
+    # Defensive programming. Don't risk looping forever in the event of a bug..
+    count=6
+    done=0
+    while [ $count -gt 0 ] && [ $done -eq 0 ]; do
+        (( count=count-1 ))
+        # Combine into a list of workspaces for all outputs, keeping the per output lists contiguous and
+        # headed by the output name. Put all this into a dmenu at the bottom, overlaying the workspace
+        # tabs. Allow the user to cancel on any pass.
+        s='Choose receiving output and workspace to send, in either order: '
+        opws=$(echo -e "${list/==/}" | rofi -dmenu -b -p "$s")
+        # Note to self: beware trailing garbage characters in ${opws} - this is why it's been a bstard to
+        # debug
+        case "${opws}" in
+            (${opz}:*)
+                list="cancel\n==\n${opx}:\n$x\n${opc}:\n$c\n"
+                output="$opz"
+                ;;
+            (${opx}:*)
+                list="cancel\n==\n${opz}:\n$z\n${opc}:\n$c\n"
+                output="$opx"
+                ;;
+            (${opc}:*)
+                output="$opc"
+                list="cancel\n==\n${opz}:\n$z\n${opx}:\n$x\n"
+                ;;
+            (cancel*)
+                # via the menu item
+                done=1
+                return
+                ;;
+            (*)
+                case "${opws:0:2}" in
+                    ([0-9][0-9])
+                        # Activate the chosen workspace.
+                        workspace="${opws:0:2}"
+                        swaymsg "workspace ${workspace}"
+                        ;;
+                    (*)
+                        # via the escape key
+                        done=1
+                        ;;
+                esac
+                ;;
+        esac
+        # do-while loop test is inside the loop hence the break.
+        if [ "_${output}" != "_" ] && [ "_${workspace}" != "_" ]; then
+            # Move the activated workspace to the chosen output.
+            swaymsg "move workspace to output $output" && break
+        fi
+    done
+}
+
+#
+# start here.
+#
+move_workspace_to_output_using_menu
+#
+# Done
+#

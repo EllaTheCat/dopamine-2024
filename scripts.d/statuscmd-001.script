@@ -1,0 +1,110 @@
+#!/bin/bash
+# statuscmd-001
+# - See ~/.config/sway/config.d/statusbars. each bar has a status command.
+# - This is a script that emits one line without linefeed when run standalone.
+# - ellathecat's machine 'quietpc' has a convection cooled 45W Intel cpu for silence!
+# - The fans were added later to increase throughput but preventing damage is essential!.
+
+# Placeholders.
+time=$(date +'%R:%S')
+time="<span foreground='pink'>${time}</span>"
+
+# READONLY VARIABLE sampled once per pass.
+cputemperature=$(cat /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input)
+
+# 1. human readable
+# Ought to hoist this constant but bear in mind how this script is called.
+# BUG: degree symbol appears in terminal but kills the status bar!
+# FIX: Change ${deg}
+deg=   ### $(echo -e \\xb0)#
+# [0-9][0]000 vs [0-9]1-9]000 "millidegrees".
+cpucelsius=$cputemperature
+cpucelsius=${cpucelsius/0000/0${deg}C}
+cpucelsius=${cpucelsius/000/${deg}C}
+
+# 2. temperature monitor and overheat avoidance
+# The "ambient (offset) file" is this script, but check/change the path for production/deployment.
+ambientfile="/home/ellathecat/.config/sway/scripts.d/statuscmd-001.script"
+ambientoffset=0
+
+# Fool the system by adding this value to raise the temperature passed to the overheat avoidance logic. The
+# value is an offset from an unstated reference temperature, not the ambient temperature.
+################################
+# PLEASE CONFIRM POWER OFF!
+################################
+# integer degrees e.g 25 or 25°C
+ambientcelsius=$(tail -n 1 $ambientfile)
+# The last line might be a hash followed by two digits
+ambientcelsius=${ambientcelsius:1:2}
+# mutable, e.g 25000 will be added.
+ambientoffset=${ambientcelsius}000
+cpudegrees=$(( $cputemperature + $ambientoffset ))
+if [ $cpudegrees -ge 79000 ]; then
+    swaymsg bar mode dock
+    zenity --warning --title "PREVENT automatic poweroff in 30 seconds" --timeout 30 --text "The CPU is dangerously hot. If you do nothing the system will shut itself down when the timeout expires in 30 seconds. If you press OK the system will not be shut down by this script, but you should only ever press OK if you dare not interrupt a running task such as 'dnf up'."
+    if [ $? -eq 250 ]; then
+        # 30 seconds elapsed, user did not intervene, sauve qui peut, log the implied consent, poweroff.
+        echo "Y $(date +%j.%R)" >> /tmp/poweroff
+	poweroff
+    else
+        # User says no. Log the override, post unambiguous status message, repeat on every tick until
+        # temperature drops. This might be justified for the occasional temperature spike, especially
+        # during 'dnf up' or long batch jobs.
+        echo "N $(date +%j.%R)" >> /tmp/poweroff
+        w="SHUT THE PC DOWN NOW"
+    fi
+elif [ $cpudegrees -ge 74000 ]; then
+    # Severity justifies the sweary warning here! Make sure it can be seen and the bar is not hidden.
+    swaymsg bar mode dock
+    w="CPU is FUCKING HOT"
+elif [ $cpudegrees -ge 65000 ]; then
+    w="CPU is uncomfortable"
+elif [ $cpudegrees -ge 55000 ]; then
+    w="CPU is getting warm"
+elif [ $cpudegrees -lt 30000 ]; then
+    w="cpu cold"
+else
+    w="cpu ok"
+fi
+w="<span foreground='white'>${w}</span>"
+# 3. Bar indicator for better visibility of CPU temperature. Requires a monospace font, but roughly equal
+# width chars suffice with small updates.  These two read-only vars could be hoisted.
+
+p='3#########4#########5#########6#########7#########8'
+q='3=========4=========5=========6=========7=========8'
+# 51 steps of one degC 30 to 80. My 4790T max operating temp is 72C on the datasheet. Sensors package
+# says 79 is critical temperature.
+# Note to self. Get 38 value working then cpu value, reduce constants.
+# Use $cpudegrees for consistency.
+### t=38
+### echo "${p:0:9}${q:9:42}"
+if [ ${cpudegrees} -lt 30000 ]; then
+    # Temperature bar underflow prevented, the warning field flags this, the numeric value is unaffected.
+    t=30
+else
+    t=${cpudegrees/0000/0}
+    t=${t/000/}
+fi
+v=$(( t - 29 ))
+u=$(( 51 - v ))
+cpubar="${p:0:$v}${q:$v:$u}"
+# Retrofitted colours, code may need refactoring.
+if   [ $cpudegrees -ge 65000 ]; then
+    # Red for hot, a warning.
+    cpubar="<span foreground='red'>${cpubar}</span>"
+elif [ $cpudegrees -ge 40000 ]; then
+    # White for legibility, normal.
+    cpubar="<span foreground='white'>${cpubar}</span>"
+else
+    # Blue for cold, unusual.
+    cpubar="<span foreground='skyblue'>${cpubar}</span>"
+fi
+# omit the \n otherwise we see double!
+echo -n "|${w}|${cpubar}|cpu=${t}C|${time}|" || exit 0
+
+# Note: ° is the degree symbol octal #o260 hex #xb0
+
+#
+# Done.
+#
+#00

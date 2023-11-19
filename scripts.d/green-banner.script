@@ -1,0 +1,59 @@
+#!/bin/bash
+# Green banner.
+# ------------------------------------------------------------------------------------------------------
+
+
+function show
+{
+    # Topics appear on the banner in reverse order of the -b <topic> items.
+    swaynag -e bottom --button-background 004400 --background 004400 \
+            --border-bottom 004400 --border 004400 \
+            --button-text ffeeff --font "DejaVu Sans 10" --text eeffee  -s 'dismiss' \
+            -m "Select a topic with mouse button 1, click X above to close topic." \
+            -b 'exit' 'sway exit' -b 'reload' 'swaymsg reload' \
+            -b '[context-sensitive help]' 'swaymsg "exec bindings-help.script"' \
+            -b 'about workspaces 2of2' 'ws2overview.script"' \
+            -b 'about workspaces 1of2' 'ws1.overview.script' \
+            -b 'about menus' 'menus.overview.script' \
+            -b 'about keys' 'keys.overview.script' \
+            -b 'about modes' 'modes.overview.script' \
+            -b 'about this' 'this.overview.script' &
+}
+
+function hide
+{
+    # Match using the backgroud colours.
+    pkill -f 'swaynag -e bottom --button-background 004400 --background 004400'
+}
+
+#
+# Start here.
+#
+
+case "${1:-toggle}" in
+    (show)
+        show
+        ;;
+    (hide)
+        hide
+        ;;
+    (toggle)
+        # Toggle the banner between showing and hidden.
+        case "$(pgrep -c -f  'swaynag -e bottom --button-background 004400 --background 004400' )" in
+            (0)
+                show
+                ;;
+            (1)
+                hide
+                ;;
+            (*)
+                exit 1
+                ;;
+        esac
+        ;;
+esac
+exit 0
+
+#
+# Done.
+#

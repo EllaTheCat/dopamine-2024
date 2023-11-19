@@ -1,0 +1,130 @@
+#!/bin/bash
+# statuscmd-000
+# - See ~/.config/sway/config.d/statusbars. each bar has a status command.
+# - This is a script that emits one line when run standalone, not a while loop.
+#
+# - Internal SSD or HDD is 'up' if it has a temperature sensor that is returning
+#   values. External USB3 caddy does not report temperature, (SSD or) HDD is 'up'
+#   if it returns disk space free. SSD or HDD that is 'down' displays its name.
+
+# The rather nice sway default is to show the date. Our format differs.
+clock=ISO\ Week\ $(date +'%V|Day %p%j |%a %Y-%m-%d')
+clock="<span foreground='pink'>${clock}</span>"
+hhmm=$(date +'%R %Z')
+hhmm="<span foreground='white'>${hhmm}</span>"
+clock="${clock} ${hhmm} "
+
+# Keep autotiling active.
+atmsg=$(pgrep -c -f autotiling-3rd-party.script)
+case "$atmsg" in
+    (0)
+        atmsg='AT:--'
+        autotiling-3rd-party.script &
+        ;;
+    (1)
+        atmsg='AT:ON'
+        ;;
+    (*)
+        atmsg='AT:??'
+        killall autotiling-3rd-party.script
+        killall autotiling
+        ;;
+esac
+# Keep ydotoold daemon active. In fedora 39, it seems to work with at least one daemon, in fedora 38
+# exactly one??? Something is wrong here.
+ydmsg=$(pgrep -c -f "sudo ydotoold")
+case "$ydmsg" in
+    (0)
+        ydmsg='YD:--'
+        sudo ydotoold &
+        ;;
+    (*)
+        ydmsg='YD:ON'
+        ;;
+esac
+f="<span foreground='lime'>${atmsg}:${ydmsg}</span>"
+# Each device has a line in 'df -h'.
+# SSD for System is 500 Gbyte and is mounted by the system.
+# 3x internal SATA HDD plus 2x external USB3/SATA HDD for data.
+# The first five HDD are Seagate Iron Wolf 4T byte NAS drives.
+# SSD and HDD must only run 'sudo hddtemp' when mounted.
+#
+# Listed in df -h drive letter order:
+# This name is not a directory name (cf the HDDs) this is the system drive.
+const_anjin=$(df -h | grep /$)
+# These names are Camel Case.
+const_kaiju=$(df -h | grep 94bd806f)
+const_orion=$(df -h | grep 9a2b3d26)
+const_titan=$(df -h | grep f9fd1893)
+if [ "${const_anjin:0:7}" = "/dev/dm" ]; then
+    anjin=$(echo "${const_anjin}" | awk '{print $4}')
+    anjin="${anjin} $(sudo /usr/sbin/hddtemp "/dev/sda" | awk '{print $3}')"
+else
+    anjin="anjin"
+fi
+# hddtemp prints $3 30^C (for example) $5 empty while awake otherwise while asleep literals $3 'drive' $5
+# 'sleeping' on stderr. Merge to $3$5 yields temperature as before while awake, substituted with 'zzz' while
+# asleep. TODO confirm it sleeps occasionally and is not being kept awake!
+if [ "${const_kaiju:0:7}" = "/dev/sd" ]; then
+    kaiju=$(echo "${const_kaiju}" | awk '{print $4}')
+    kaiju="${kaiju} $(sudo /usr/sbin/hddtemp "${const_kaiju:0:8}" 2>&1| awk '{print $3$5}' | sed 's/drivesleeping/zzz/g')"
+else
+    kaiju="kaiju"
+fi
+if [ "${const_orion:0:7}" = "/dev/sd" ]; then
+    orion=$(echo "${const_orion}" | awk '{print $4}')
+    orion="${orion} $(sudo /usr/sbin/hddtemp "${const_orion:0:8}" 2>&1| awk '{print $3$5}' | sed 's/drivesleeping/zzz/g')"
+else
+    orion="orion"
+fi
+if [ "${const_titan:0:7}" = "/dev/sd" ]; then
+    titan=$(echo "${const_titan}" | awk '{print $4}')
+    titan="${titan} $(sudo /usr/sbin/hddtemp "${const_titan:0:8}" 2>&1| awk '{print $3$5}' | sed 's/drivesleeping/zzz/g')"
+else
+    titan="titan"
+fi
+# These names are lower case.
+const_osaka=$(df -h | grep osaka)
+const_tokyo=$(df -h | grep tokyo)
+# USB3 to SATA boxes do not forward temperatures.
+if [ "${const_osaka:0:7}" = "/dev/sd" ]; then
+    osaka=$(echo "${const_osaka}" | awk '{print $4}')
+else
+    osaka="osaka"
+fi
+if [ "${const_tokyo:0:7}" = "/dev/sd" ]; then
+    tokyo=$(echo "${const_tokyo}" | awk '{print $4}')
+else
+    tokyo="tokyo"
+fi
+# The 001 script did this first, here it puts the fan rpm into context.
+cpucelsius=$(cat /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input)
+cpucelsius=${cpucelsius/0000/0C}
+cpucelsius=${cpucelsius/000/C}
+# CPU_FANS 2x120mm on Y splitter cable cpu
+cpu=$(sensors | grep fan1 | awk '{print $2}')
+# SYS_FAN2 120mm disks
+sys2=$(sensors | grep fan5 | awk '{print $2}')
+
+# ------------------------------------------------------------------------------------------------------
+# The single bars are just text, not unix pipes. Showing free space, not space used.
+# A: system SSD O: T: K: internal Iron Wolf drives t: o: external Iron Wolf drives.
+s="[A:${anjin}][O:${orion}][T:${titan}][K:${kaiju}]|[o:${osaka}][t:${tokyo}]"
+s="<span foreground='white'>$s</span>"
+# cpu is 120mm rear sense plus 120 mm side both blowing air in over cpu heatsink.
+# sys2 is 120mm inside blowing across disk cage towards the front of the PC case.
+# There's an 80mm unmonitored USB fan blowing air in mounted on the disk bay door.
+t="[cpu:${cpu}|sys:${sys2}@${cpucelsius}]"
+t="<span foreground='yellow'>$t</span>"
+echo "|$f|$t|$s|${clock}|"
+# ------------------------------------------------------------------------------------------------------
+
+# The HDD names are 'big things' for big drives. 'titan' is a big moon
+# we've sent a probe to. 'orion' is a constellation and also a nuclear
+# pulse spacecraft proposed in 1958, 'kaiju' is a big monster, 'osaka'
+# and 'tokyo' are big cities in Japan popular with kaiju. The SSD name
+# has five letters and is Japanese for 'pilot' to retrofit the theme.
+
+#
+# Done.
+#

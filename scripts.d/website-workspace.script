@@ -1,0 +1,159 @@
+#!/bin/bash
+# website workspace script
+
+# 151-divkey-units-digit.config defines 2 banks of 10 websites on workspaces 40-49 and 60-69, 4X for
+# serious or work websites, 6X for play or social websites. 999-ellathecat.config defines some
+# application specific w ebsites below workspace 20.
+
+# Open one or more webpages , thereafter the key binding that created them merely visits the workspace.
+
+# $1 is ${workspace}:${maxinstances}
+# $2 is ${wstype}:${delay}
+# $3 $4 $5 optional URLs
+# ----------------------------------------------------------------------------------------------------------
+debug=/tmp/debug
+echo '----' > $debug
+# We don't want to risk breakage by parameter list changes so it's the mplayer trick, pack several
+# values into a colon separated list .
+case "${2:-new:1}" in
+    (new*|private*)
+        wtype=${2/:*/}
+        delay=${2/*:/}
+        echo "$wtype $delay" >> $debug
+        ;;
+    (*)
+        echo "bad arg[2] $wtype $delay" >> $debug
+        exit 1
+        ;;
+esac
+case "${1}" in
+    ([0-9][0-9]:[0-9])
+        ws=${1:0:2}
+        swaymsg "workspace --no-auto-back-and-forth number $ws"
+        sleep 3s
+        maxinstances=${1:3:1}
+        echo "$ws $maxinstances" >> $debug
+        ;;
+    (*)
+        echo "bad arg[1] $ws $maxinstances" >> $debug
+        exit 1
+        ;;
+esac
+# ------------------------------------------------------------------------------------------------------
+list=$(swaymsg -t get_workspaces -p | grep -A3 focused )
+echo $list >> $debug
+represent=$(echo $list | grep Represent | sed 's/\(\[\|\]\)/\n/g')
+instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c firefox)
+urldef="file:///home/ellathecat/Desktop/1440x1080.png"
+# ------------------------------------------------------------------------------------------------------
+# Delete this case stmt and the script still works. All it does is use the workspace number to select
+# from a set of default urls to create a little library of sway manuals.
+case "$ws" in
+    (40)
+        urldef="file:///home/ellathecat/WebPageCache/sway(1)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (41)
+        urldef="file:///home/ellathecat/WebPageCache/sway(5)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (42)
+        urldef="file:///home/ellathecat/WebPageCache/sway-input(5)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (43)
+        urldef="file:///home/ellathecat/WebPageCache/xkeyboard-config(7)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (44)
+        urldef="file:///home/ellathecat/WebPageCache/i3%20i3%20User%E2%80%99s%20Guide.html"
+        ;;
+    (45)
+        urldef="file:///home/ellathecat/WebPageCache/sway-output(5)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (46)
+        urldef="file:///home/ellathecat/WebPageCache/swaymsg(1)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (47)
+        urldef="file:///home/ellathecat/WebPageCache/sway-ipc(7)%20%E2%80%94%20Arch%20manual%20pages.html"
+        ;;
+    (48)
+        urldef="file:///home/ellathecat/WebPageCache/sway-bar(5)%20%E2%80%94%20Arch%20manual%20pages.html"
+         ;;
+    (49)
+        # Suppose you want to read a manual but the target workspace is occupied. Keep one workspace in
+        # reserve so you can swap the target with the reserve, read the target manual and then restore
+        # the target workspace. Exercise for the student.
+        ;;
+esac
+# ------------------------------------------------------------------------------------------------------
+echo "urldef $urldef $ws" >> $debug
+echo "ready :-)" >> $debug
+count=$instances
+while true; do
+# The number of instances remaining, decremented on each pass because $count was incremented.
+    index=$(( maxinstances - count ))
+    echo "index $index" >> $debug
+    # KISS. I need to learn how to walk positional parameters. It's good enough for this. Reverse the
+    # list such that the last url to be browsed is first in the list passed to the script. List length
+    # is maxinstances for one window per instance. Default url so fails gracefully.
+    case "$index" in
+        (0)
+            echo "done :-)" >> $debug
+            exit 0
+         ;;
+        (1)
+            url=${3:-${urldef}}
+            echo "flag $4" >> $debug
+            ;;
+        (2)
+            url=${4:-${urldef}}
+            ;;
+        (3)
+            url=${5:-${urldef}}
+            ;;
+        (4)
+            url=${6:-${urldef}}
+            ;;
+        (*)
+            echo "no urls left"
+            exit 1
+            ;;
+    esac
+    # Setting the workspace again, just before launch, HAS NO EFFECT on firefox launch. Quote the URL.
+    exe="$(printf "exec firefox --%s-window \"%s\"" "$wtype" "$url")"
+    echo "launch $exe" >> $debug
+    swaymsg "$exe"
+    # Give the browser enough time to start up and load the webpage.
+    sleep 3s
+    # Same value as count.
+    frame=$(( count - instances ))
+    echo "frame $frame " >> $debug
+    swaymsg "title_format \"workspace $ws frame $frame %title\""
+    swaymsg "mark --replace \"$ws$frame\""
+    # Sometimes apps start on another workspace. We prefer to see the app start on its designated
+    # workspace, but we don't want too long a wait, so we launch, then belt and braces moves the
+    # launched app to the workspace.
+    swaymsg "move container to workspace $ws"
+    # --------------------------------------------------------------------------------------------------
+    echo "bind? $index $4" >> $debug
+    # KISS. 1 browser instance at $3, $4 normally absent
+    if [ "${index}" = "1" ]; then
+        case "$4" in
+            # Use the app homepage or pseudo-url as a flag to launch the app
+            (*www.thunderbird.net*)
+                    swaymsg "exec gio launch /home/ellathecat/Desktop/mozilla-thunderbird.desktop"
+                    ;;
+            (*www.pcmanfm.net*)
+                    swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm.desktop"
+                    ;;
+        esac
+    fi
+    # --------------------------------------------------------------------------------------------------
+    # Infinite loop wthout this!
+    count=$(( count=count+1 ))
+    # --------------------------------------------------------------------------------------------------
+done
+
+
+#
+# Done.
+#
+
+###            (*https://www.linux-magazine.com/index.php/layout/set/print/Issues/2021/243/Bpytop/(tagID)/108

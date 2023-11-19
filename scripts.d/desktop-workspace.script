@@ -1,0 +1,84 @@
+#!/bin/bash
+# $0=desktop-workspace.script
+# $1=workspace $2=desktopfile $3=launchdelay (optional).
+# ------------------------------------------------------------------------------------------------------
+# This script is more rigorous than workspace scripts need to be, because it might be used at startup.
+# ------------------------------------------------------------------------------------------------------
+
+# Script can be told to delay launch by $3 seconds. Stagger $3 when making successive requests in order
+# to avoid "pile-ups".
+sleep "${3:-0.1s}"
+case "$(dirname "$2")" in
+    # My custom shortcuts live in the otherwise unused Desktop folder, it's a dinky graphic
+    # launcher. The validation makes sure that this script uses them, not the generic ones.
+    # NB dirname without trailing slash.
+    (/home/*/Desktop)
+        # Change to the workspace if specified.
+        case "$1" in
+            ([0-9][0-9])
+                ws=$1
+                swaymsg "workspace number $ws"
+                # With belt and braces this is cosmetic, we prefer to change then launch.
+                sleep 1.5s
+                ;;
+            (current)
+                # Explicit request to NOT change workspace.
+                # Get its number just in case we need it later.
+                list=$(swaymsg -t get_workspaces -p | grep -A3 '\(focused\)')
+                ws=$(echo $list | awk '{print $2}')
+                ;;
+            (*)
+                # Reject all non-numeric and all out-of-range.
+                timeout=30s
+                swaynag -e bottom --button-background 660000 --background 660000  --border-bottom 660000 --border 660000 --button-text 001100 --font "DejaVu Sans 10" --text eeffee -s 'dismiss' -m "| bogus workspace request bad workspace = $1 perhaps a typo?|" -b 'reload' 'swaymsg reload' -b 'default' 'swaymsg mode default' &
+                sleep $timeout
+                pkill -f  "swaynag -e bottom --button-background 660000 --background 660000"
+                exit 1
+                ;;
+        esac
+        # launch the app.
+        app=$(basename "$2")
+        ### echo "/ $2 / $app"
+        case "${app/.desktop/}" in
+            (vlc-flatpak|vlc|pavucontrol|mpv|thunar|bpytop|firefox-radio|firefox-gmail|firefox-spotify-premium|scrcpy-help|mozilla-thunderbird|qterminal)
+                gio launch "$2"
+                if [ $? != 0 ]; then
+                    timeout=30s
+                    swaynag -e bottom --button-background 660000 --background 660000  --border-bottom 660000 --border 660000 --button-text 001100 --font "DejaVu Sans 10" --text eeffee -s 'dismiss' -m "| failed attempt to launch ${app/.desktop/} check the desktop file Exec line?|" -b 'reload' 'swaymsg reload' -b 'default' 'swaymsg mode default' &
+                    sleep $timeout
+                    pkill -f  "swaynag -e bottom --button-background 660000 --background 660000"
+                    exit 2
+                fi
+                # Belt and braces
+                case "$ws" in
+                    ([0-9][0-9])
+                        # 0.5s not enough for mozilla-thunderbird 2.5s upper bound.
+                        sleep 2.5s
+                        swaymsg "move container to workspace ${ws}"
+                        ;;
+                esac
+                ;;
+            (*)
+                timeout=30s
+                swaynag -e bottom --button-background 660000 --background 660000  --border-bottom 660000 --border 660000 --button-text 001100 --font "DejaVu Sans 10" --text eeffee -s 'dismiss' -m "| unknown desktop file $app perhaps a typo?|" -b 'reload' 'swaymsg reload' -b 'default' 'swaymsg mode default' &
+                sleep $timeout
+                pkill -f  "swaynag -e bottom --button-background 660000 --background 660000"
+                exit 3
+                ;;
+        esac
+        ;;
+    (*)
+        timeout=30s
+        swaynag -e bottom --button-background 660000 --background 660000  --border-bottom 660000 --border 660000 --button-text 001100 --font "DejaVu Sans 10" --text eeffee -s 'dismiss' -m "| bad/unknown folder for desktop file $2 relocate to '$HOME/Desktop'|" -b 'reload' 'swaymsg reload' -b 'default' 'swaymsg mode default' &
+        sleep $timeout
+        pkill -f  "swaynag -e bottom --button-background 660000 --background 660000"
+        exit 4
+        ;;
+esac
+exit 0
+
+# ------------------------------------------------------------------------------------------------------
+
+#
+# Done.
+#

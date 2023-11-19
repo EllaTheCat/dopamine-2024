@@ -1,0 +1,73 @@
+#!/bin/bash
+# ------------------------------------------------------------------------------------------------------
+
+# The $toggle variable decides which one of two scripts should display on one side and displays the other
+# script on the other side. Toggle the $toggle value and the stats bars swap positions.
+
+# The use case is when one output is fullscreen and you don't want to exit fullscreen in order read the
+# status that would be shown there. One status bar is primarily about disk free space, the other about cpu
+# temperature.
+
+# ---------------------------------------------------------------------------------..---------------------
+
+# I - Script must be called with this argument just once but before any other to [i]nitialise.
+# L - Script called with this argument runs the script for the bar at upper [l]eft.
+# R - Script called with this argument runs the script for the bar at upper [r]ight.
+# S - Script called with this argument [s]waps the scripts for the two upper bars.
+
+
+
+# EllaTheat initialises this script in 999-ellathecat.config
+# There are no constraints on when the swap can be done but that doesn't mean it's safe!
+# Swapping exchanges the lines of text but doesn't swap background, font, etc.
+# Swapping does not affect the update rate of a script once initialised
+# The called scripts emit one line of status so you must silence debug for production.
+
+# You should ensure $user is valid for you.  Until that is robustly automated:
+user=ellathecat
+
+# ------------------------------------------------------------------------------------------------------
+
+case "$1"  in
+    (I|i)
+        sleep "${2:-0.1s}"
+        toggle=0
+        mkdir -p   /tmp/"$user"
+        echo "0" > /tmp/"$user"/toggle
+        ;;
+    (S|s)
+        sleep "${2:-0.1s}"
+        toggle=$(cat /tmp/"$user"/toggle)
+#       echo "$toggle"
+        case "${toggle:0:1}" in
+            (0)
+                toggle=1
+                echo "1" > /tmp/"$user"/toggle
+                ;;
+            (1)
+                toggle=0
+                echo "0" > /tmp/"$user"/toggle
+                ;;
+        esac
+        ;;
+    (L|l)
+        toggle=$(cat /tmp/"$user"/toggle)
+        #echo "${toggle:0:1}"
+        if [ "${toggle:0:1}" = "0" ]; then
+            /home/"$user"/.config/sway/scripts.d/statuscmd-000.script; sleep 6;
+        else
+            /home/"$user"/.config/sway/scripts.d/statuscmd-001.script; sleep 3;
+        fi
+        ;;
+    (R|r)
+        toggle=$(cat /tmp/"$user"/toggle)
+        #echo "${toggle:0:1}"
+        if [ "${toggle:0:1}" = "1" ]; then
+            /home/"$user"/.config/sway/scripts.d/statuscmd-000.script; sleep 6;
+        else
+            /home/"$user"/.config/sway/scripts.d/statuscmd-001.script; sleep 3;
+        fi
+        ;;
+esac
+
+# ------------------------------------------------------------------------------------------------------
