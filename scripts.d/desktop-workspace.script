@@ -40,7 +40,7 @@ case "$(dirname "$2")" in
         app=$(basename "$2")
         ### echo "/ $2 / $app"
         case "${app/.desktop/}" in
-            (vlc-flatpak|vlc|pavucontrol|mpv|thunar|bpytop|firefox-radio|firefox-gmail|firefox-spotify-premium|scrcpy-help|mozilla-thunderbird|qterminal)
+            (vlc-flatpak|vlc|pavucontrol|mpv|thunar|pcmanfm-qt|pcmanfm|bpytop|firefox-radio|firefox-gmail|firefox-spotify-premium|scrcpy-help|mozilla-thunderbird|qterminal)
                 gio launch "$2"
                 if [ $? != 0 ]; then
                     timeout=30s

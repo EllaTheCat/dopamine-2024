@@ -4,9 +4,14 @@
 case "$1" in
     (ellathecat)
         delay=$2
-        (sleep ${delay} && desktop-workspace.script 10 /home/ellathecat/Desktop/vlc-flatpak.desktop 1s) &
-        (sleep ${delay} && desktop-workspace.script 11 /home/ellathecat/Desktop/pavucontrol.desktop 3s) &
-        (sleep ${delay} && desktop-workspace.script 18      /home/ellathecat/Desktop/bpytop.desktop 5s) &
+        (sleep ${delay} && desktop-workspace.script 91 /home/ellathecat/Desktop/pavucontrol.desktop 2s) &
+        (sleep ${delay} && desktop-workspace.script 90 /home/ellathecat/Desktop/qterminal.desktop 10s) &
+        (sleep ${delay} && desktop-workspace.script 80 /home/ellathecat/Desktop/qterminal.desktop 13s) &
+        (sleep ${delay} && desktop-workspace.script 70 /home/ellathecat/Desktop/qterminal.desktop 16s) &
+        (sleep ${delay} && desktop-workspace.script 10 /home/ellathecat/Desktop/qterminal.desktop 19s) &
+        (sleep ${delay} && desktop-workspace.script 11 /home/ellathecat/Desktop/bpytop.desktop 22s) &
+        (sleep ${delay} && desktop-workspace.script 14 /home/ellathecat/Desktop/vlc-flatpak.desktop 30s) &
+        (sleep ${delay} && desktop-workspace.script 15 /home/ellathecat/Desktop/pcmanfm-qt.desktop 37s) &
         ;;
     (*)
         speak-ng "Create your $USER case in $(basename $0)"
@@ -15,3 +20,4 @@ esac
 #
 # Done.
 #
+  -rwxr-xr-x. 1 ellathecat ellathecat 1737 Oct 24 12:53 ydotoold-scri

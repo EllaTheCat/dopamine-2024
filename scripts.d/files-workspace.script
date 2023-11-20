@@ -7,6 +7,8 @@
 # $1 is ${workspace}:${maxinstances}
 # $2 is ${delay}
 # $3,$4,$5 optional folders
+
+# pcmanfm-qt and Thunar seem OK for fedora39
 # ----------------------------------------------------------------------------------------------------------
 debug=/tmp/debug
 echo '----' > $debug
@@ -33,7 +35,7 @@ case "${1:-55}" in
     ([0-9][0-9]:[1-9])
         ws=${1:0:2}
         swaymsg "workspace --no-auto-back-and-forth number $ws"
-        sleep 1.5s
+        sleep 2s
         maxinstances=${1:3:1}
         ;;
     (*)
@@ -46,7 +48,7 @@ echo "workspace $ws" >> $debug
 list=$(swaymsg -t get_workspaces -p | grep -A3 focused )
 echo $list >> $debug
 represent=$(echo $list | grep Represent | sed 's/\(\[\|\]\)/\n/g')
-instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c pcmanfm)
+instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c -E \(pcmanfm-qt\|Thunar\))
 echo "$instances of $maxinstances" >> $debug
 case "$maxinstances" in
     (1|2|3|4|5|6)
@@ -92,9 +94,8 @@ do
     case "$folder" in
         (file:///*|/*|xyzzy)
             # open at user supplied arbitrary folder
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm.desktop ${folder/xyzzy/}"
-               # ---------------------------------------------------------- A
-            sleep 2s
+            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${folder/xyzzy/}"
+            sleep 3s
             frame=$(( count - instances ))
             echo "frame $frame" >> $debug
             swaymsg "title_format \"workspace $ws frame $frame %title\""
@@ -103,11 +104,10 @@ do
             swaymsg "move container to workspace $ws"
             # ---------------------------------------------------------- B
             ;;
-        (kaiju|orion|titan|osaka|tokyo|wolf359)
-            # open at a near-top-level folder on another drive (shortcut names are easier than
-            # /mnt/,/media,...)  You'll need a seperate desktop file for each shortcut, copy the master,
-            # rename as below, put the folder path as %U on the exec line.
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-${folder}.desktop"
+        (Kaiju|Orion|Titan|Osaka|Tokyo|Wolf359|_*)
+            # Use symbolic links found in home folder. Names of disk drives lead underscore optional.
+            # The underscore is stripped and prepended so avoid using it inside names.
+            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${HOME}/_${folder/_/}"
             # ---------------------------------------------------------- P
             # Block PQ below is a copy of block AB above.
             # ---------------------------------------------------------- P
