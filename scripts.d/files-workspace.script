@@ -8,7 +8,8 @@
 # $2 is ${delay}
 # $3,$4,$5 optional folders
 
-# pcmanfm-qt and Thunar seem OK for fedora39
+# Thunar and pcmanfm-qt seem OK for fedora39, cut do avoid pcmanfm. Thunar "needs" Gigolo while
+# pcmanfm-qt does not. My cheap and cheerful algorithm launches gigolo instead of a 3rd Thunar.
 # ----------------------------------------------------------------------------------------------------------
 debug=/tmp/debug
 echo '----' > $debug
@@ -48,7 +49,7 @@ echo "workspace $ws" >> $debug
 list=$(swaymsg -t get_workspaces -p | grep -A3 focused )
 echo $list >> $debug
 represent=$(echo $list | grep Represent | sed 's/\(\[\|\]\)/\n/g')
-instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c -E \(pcmanfm-qt\|Thunar\))
+instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c -E \(pcmanfm-qt\|thunar\|gigolo\))
 echo "$instances of $maxinstances" >> $debug
 case "$maxinstances" in
     (1|2|3|4|5|6)
@@ -94,7 +95,11 @@ do
     case "$folder" in
         (file:///*|/*|xyzzy)
             # open at user supplied arbitrary folder
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${folder/xyzzy/}"
+            if [ $index -eq 2 ]; then
+                swaymsg "exec gio launch /home/ellathecat/Desktop/gigolo.desktop"
+            else
+                swaymsg "exec gio launch /home/ellathecat/Desktop/thunar.desktop ${folder/xyzzy/}"
+            fi
             sleep 3s
             frame=$(( count - instances ))
             echo "frame $frame" >> $debug
@@ -107,7 +112,11 @@ do
         (Kaiju|Orion|Titan|Osaka|Tokyo|Wolf359|_*)
             # Use symbolic links found in home folder. Names of disk drives lead underscore optional.
             # The underscore is stripped and prepended so avoid using it inside names.
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${HOME}/_${folder/_/}"
+            if [ $index -eq 2 ]; then
+                swaymsg "exec gio launch /home/ellathecat/Desktop/gigolo.desktop"
+            else
+                swaymsg "exec gio launch /home/ellathecat/Desktop/thunar.desktop ${HOME}/_${folder/_/}"
+            fi
             # ---------------------------------------------------------- P
             # Block PQ below is a copy of block AB above.
             # ---------------------------------------------------------- P
