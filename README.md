@@ -5,21 +5,19 @@ This repository exists because my top priority is to get an offsite backup of my
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
-### Update 8 Nov to 20 Nov
+### Update 8 Nov to 24 Nov
 
 - Fedora 39 updated from 38. Good experience.
-
 - fedora 39 dark theme breakage. AdWaita-qt5 and -qt6 packages installed.
 - qterminal as an alternative to xfce4-terminal but dropdown feature fails
 - pcmanfm-qt as an alternative to thunar
 - Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark qterminal looks OK.
 - Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark pcmanfm-qt looks OK.
 - **avoid pcmanfm** (gtk) it is **dangerously broken** for drag-n-drop, do not use
-- Smooth startup works as a showcase
-- screenshots 3840x1080 ask me on reddit messaging or chat if you'd like a preview
-
-Still just backup commmits after sanity checks. The "testing" is simply me using it during November,
-fixing what breaks or I need. The files should all be there sometime during the weekend of the 20th.
+- Smooth startup works as a showcase, was flaky, keep an eye on it
+- Address the move-to-container in reverse
+- 19:00 Enough on github to be a baseline
+- Weekend 25/25 todo: write INSTALL.md
 
 ## What's in it for me?
 
