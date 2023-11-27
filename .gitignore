@@ -21,3 +21,8 @@ config.d/*.[a-bd-z]*
 scripts.d/*.[a-rt-z]*
 config.d/*.c[a-np-z]*
 scripts.d/*.s[a-bd-z]*
+
+# WE need an immutable copy of a third party progrsm called autotiling installed as describedd in INSTALL.md but keep it out of the dopamine-2024 repo please.
+autotiling-3rd-party.script
+
+
