@@ -8,6 +8,8 @@ config
 # the result of passing the markdown README.md through discount-makepage
 # so I don't need a markdown browser plugin. I installed it on fedora38.
 README.html
+INSTALL.html
+
 
 # legacy boilerplate - ignore backups, crashes, etc
 config.d/#*
