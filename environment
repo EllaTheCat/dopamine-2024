@@ -1,0 +1,18 @@
+# -*- Mode: Shell-script -*-
+# User-specific variables should be placed in $XDG_CONFIG_HOME/sway/environment
+# ^^^ i.e. this file - ellathecat
+
+SWAY_CONFIG_DIR=/home/ellathecat/config.d/
+SWAY_SCRIPTS_DIR=/home/ellathecat/scripts.d/
+
+# ellathecat specific.
+SWAY_CONFIG_FILE=/home/ellathecat/config.d/000-includes.config
+SWAY_CONFIG_SYMLINK=/home/ellathecat/config.d/config
+#
+# PLEASE DO THIS ONCE:
+# ln -sf $SWAY_CONFIG_FILE $SWAY_CONFIG_SYMLINK
+
+
+#
+# Done.
+#

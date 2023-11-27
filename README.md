@@ -1,23 +1,30 @@
 # dopamine-2024 README.md
-## Status 20 November 2023
+## Status by 27th/Planning for 30th November 2023
 
 This repository exists because my top priority is to get an offsite backup of my sway environment, and
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
-### Update 8 Nov to 24 Nov
+### Update 8 Nov to 27 Nov
 
 - Fedora 39 updated from 38. Good experience.
 - fedora 39 dark theme breakage. AdWaita-qt5 and -qt6 packages installed.
-- qterminal as an alternative to xfce4-terminal but dropdown feature fails
-- pcmanfm-qt as an alternative to thunar
-- Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark qterminal looks OK.
+- qterminal accepted as an alternative to xfce4-terminal WITHOUT dropdown feature
+- pcmanfm-qt accepted as an alternative to thunar
+- pcmanfm REJECTED unconditionally
 - Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark pcmanfm-qt looks OK.
-- **avoid pcmanfm** (gtk) it is **dangerously broken** for drag-n-drop, do not use
-- Smooth startup works as a showcase, was flaky, keep an eye on it
-- Address the move-to-container in reverse
-- 19:00 Enough on github to be a baseline
-- Weekend 25/25 todo: write INSTALL.md
+- Smooth startup works as a showcase.
+- files-workspaces-setup.script does nothing, it should put Thunar up FIXME
+- Provide move-to-container as pull-to-container. Focus by criteria, doesn't have to be on-screen,
+  then move focsed target to container.
+- Alacritty  instances can be assigned an app_id at launch. This is a must-have because it facilitates writing criteria.
+- Alacritty breaks the $TERM alternative, consider enumerated %T
+- Finally, the workspaces display their tabs corrrectly, in order, according to number of monitors,
+  dynamically. The default monitor ordering is left to right, formerly it was swapped.
+- started to write INSTALL.md
+- Upload necessary scripts asap today (27th) WITHOUT ShellCheck. i have to break down commits
+  into small pieces because otherwise my PD will encourage me to procrastinate. I can shellcheck
+  later, better with wobbly code than no code.
 
 ## What's in it for me?
 
@@ -46,7 +53,7 @@ like to know.
 - **WASD keyboard** The main keyboard provides three inverted-T cursor keypads for focusing a container,
     moving a container, resizing a container. These can be mixed together, they can be used in default
     mode with the Mod4 modifier,or unmodified in a Menu mode entered by the Menu key. The Menu key
-    detrmines two major modes, Menu Keys and More Menu Keys.
+    provides two major modes, Menu Keys and More Menu Keys.
 
 - **i3|sway keyboard** The WASD keyboard is more or less a simple rearrangement of the standard i3|sway
    layout we have all invested in. I intend to make the i3|sway standard bindings available as an

@@ -1,0 +1,61 @@
+#!/bin/bash
+# bindings-help
+# ------------------------------------------------------------------------------------------------------
+# Determine the current mode and post the appropriate help document. The documents are freeform text
+# with a two line bash script at the top. The script loads the document into Emacs.
+# ------------------------------------------------------------------------------------------------------
+
+scripts=/home/ellathecat/.config/sway/scripts.d
+
+# The mode names are enclosed in double quotes and may contain spaces.
+# See 143-binding-mode-indicator.config for the precise mode names used.
+name=$(swaymsg -t get_binding_state | sed  "s/[{:}]//g" | sed 's/"name"//g')
+# Printing the name between markers reveals bogus whitespace, strip it precisely.
+name=${name:4}
+# For example matching (\"Menu\ Keys\") is correct but (?Menu?Keys?) is easier.
+# Chosen script is launched such that it does not block with "Waiting for Emacs".
+case "${name}" in
+    (?default?)
+    $scripts/defaultmode.help.script &
+    ;;
+    (?Menu?Keys?)
+    $scripts/menukeys.help.script &
+    ;;
+    (?More?Menu?Keys?)
+    $scripts/moremenukeys.help.script &
+    ;;
+    (?Workspaces*)
+    $scripts/ws-reaper.help.script &
+    ;;
+    (*Reaper*)
+    $scripts/ws-reaper.help.script &
+    ;;
+    (?visit?workspace?--?)
+    #*divfn?with*)
+    $scripts/divkey.help.script &
+    ;;
+    (?move?container?to?workspace?--?)
+    #*mulfn?with*)
+    $scripts/mulkey.help.script &
+    ;;
+    (*subfn?with*)
+    $scripts/subkey.help.script &
+    ;;
+    (*addfn?with*)
+    $scripts/addkey.help.script &
+    ;;
+    (*ntrfn?with*)
+    $scripts/ntrkey.help.script &
+    ;;
+    (*Don.t.Fear.The.Reaper*)
+    $scripts/reaper.help.script &
+    (*)
+    echo ">$name<"
+    ;;
+esac
+
+# ------------------------------------------------------------------------------------------------------
+
+#
+# Done.
+#
