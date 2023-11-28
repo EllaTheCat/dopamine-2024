@@ -47,7 +47,7 @@ case "${name}" in
     (*ntrfn?with*)
     $scripts/ntrkey.help.script &
     ;;
-    (*Don.t.Fear.The.Reaper*)
+    (*ga Don.t.Fear.The.Reaper*)
     $scripts/reaper.help.script &
     (*)
     echo ">$name<"

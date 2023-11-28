@@ -5,9 +5,9 @@
 
 function show
 {
-    # Bookmarks function is emacs binding   C-x r l { (bookmark-bmenu-list).
-    # You can edit your Emacs bookmarks so you can bookmark the configuration codebase.
     # Topics appear on the banner in reverse order of the -b <topic> items.
+    # Bookmarks function is emacs binding  C-x r l = (bookmark-bmenu-list).
+    # You can edit your Emacs bookmarks so you can bookmark the configuration codebase.
     swaynag -e bottom --button-background 004400 --background 004400 \
             --border-bottom 004400 --border 004400 \
             --button-text ffeeff --font "DejaVu Sans 10" --text eeffee  -s 'dismiss' \

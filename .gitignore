@@ -9,7 +9,8 @@ config
 # so I don't need a markdown browser plugin. I installed it on fedora38.
 README.html
 INSTALL.html
-
+\#README*
+\#INSTALL*
 
 # legacy boilerplate - ignore backups, crashes, etc
 config.d/#*

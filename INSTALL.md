@@ -54,7 +54,13 @@ is context sensitive help, which provides diffeent help texts for different mode
 workspace scripts that run when a workspace is visited, they're in good shape.
 
  Thi project uses a third party program called autotiling, (https://github.com/nwg-piotr/autotiling)
- that must keep running during the session.  Download it from githu b and install it. Take a copy and
+ that must keep running during the session.  Download it from github and install it. Take a copy and
  rename it to 'autotiling-3rd-party.script', use chmod to make it readable and executable by anyone, and
  writeable by no-one. It's important to make it clear we are using someone else's work and are using it
  as-is to avoid making programming mistakes that would reflect badly on its authors.
+
+## 999-ellathecat.config
+
+This file sets up about twnty workspaces over two minutes, and it defines a miscellaneous set of initial
+values. For the first runs of this sway configuration comment out or otherwise disable most if not all
+of it for debug readiness.
