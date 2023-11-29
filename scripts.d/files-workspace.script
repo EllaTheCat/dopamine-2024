@@ -1,4 +1,5 @@
 #!/bin/bash
+# files-workspace.script
 
 # Create xseveral file manager  windows so that thereafter the key binding that created them
 # merely visits the workspace.
@@ -8,9 +9,10 @@
 # $2 is ${delay}
 # $3,$4,$5 optional folders
 
-# Thunar and pcmanfm-qt seem OK for fedora39, cut do avoid pcmanfm. Thunar "needs" Gigolo while
-# pcmanfm-qt does not. My cheap and cheerful algorithm launches gigolo instead of the N'th Thunar but
-# that is currently disabled so I can ship..
+# DANGER WILL ROBINSON!!!  Something about filemanagers is badly broken as of 2023/11/29. pcmanqt loses
+# things and thunar refuses to start. This leaves pcmanfm-qt. For the pre-release this script assumes
+# pcmanfm-qt. The script has been dumbed down so we can meet the minimum requiremen of launching file
+# manager instances,
 # ----------------------------------------------------------------------------------------------------------
 debug=/tmp/debug
 echo '----' > $debug
@@ -95,38 +97,29 @@ do
     esac
     case "$folder" in
         (file:///*|/*|xyzzy)
-            # open at user supplied arbitrary folder
-            if [ $index -eq 9 ]; then
-                swaymsg "exec gio launch /home/ellathecat/Desktop/gigolo.desktop"
-            else
-                swaymsg "exec gio launch /home/ellathecat/Desktop/thunar.desktop ${folder/xyzzy/}"
-            fi
+            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${folder/xyzzy/}"
             sleep 3s
-            frame=$(( count - instances ))
-            echo "frame $frame" >> $debug
-            swaymsg "title_format \"workspace $ws frame $frame %title\""
-            swaymsg "mark --replace \"$ws$frame\""
-            sleep 1.5s
+            ### frame=$(( count - instances ))
+            ### echo "frame $frame" >> $debug
+            ### swaymsg "title_format \"workspace $ws frame $frame %title\""
+            ### swaymsg "mark --replace \"${ws}${frame}\""
+            ### sleep 1.5s
             swaymsg "move container to workspace $ws"
             # ---------------------------------------------------------- B
             ;;
         (Kaiju|Orion|Titan|Osaka|Tokyo|Wolf359|_*)
             # Use symbolic links found in home folder. Names of disk drives lead underscore optional.
             # The underscore is stripped and prepended so avoid using it inside names.
-            if [ $index -eq 9 ]; then
-                swaymsg "exec gio launch /home/ellathecat/Desktop/gigolo.desktop"
-            else
-                swaymsg "exec gio launch /home/ellathecat/Desktop/thunar.desktop ${HOME}/_${folder/_/}"
-            fi
+            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${HOME}/_${folder/_/}"
             # ---------------------------------------------------------- P
             # Block PQ below is a copy of block AB above.
             # ---------------------------------------------------------- P
             sleep 2s
-            frame=$(( count - instances ))
-            echo "frame $frame" >> $debug
-            swaymsg "title_format \"workspace $ws frame $frame %title\""
-            swaymsg "mark --replace \"$ws$frame\""
-            sleep 1.5s
+            ### frame=$(( count - instances ))
+            ### echo "frame $frame" >> $debug
+            ### swaymsg "title_format \"workspace $ws frame $frame %title\""
+            ### swaymsg "mark --replace \"$ws$frame\""
+            ### sleep 1.5s
             swaymsg "move container to workspace $ws"
             # ---------------------------------------------------------- Q
             ;;
