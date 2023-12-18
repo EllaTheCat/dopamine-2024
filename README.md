@@ -1,31 +1,11 @@
 # dopamine-2024 README.md
-## Status by 27th/Planning for 30th November 2023
 
 This repository exists because my top priority is to get an offsite backup of my sway environment, and
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
-### Update 8 Nov to 27 Nov
-
-- Fedora 39 updated from 38. Good experience.
-- fedora 39 dark theme breakage. AdWaita-qt5 and -qt6 packages installed.
-- qterminal accepted as an alternative to xfce4-terminal WITHOUT dropdown feature
-- pcmanfm-qt accepted as an alternative to thunar
-- pcmanfm REJECTED unconditionally
-- Exec=env QT_STYLE_OVERRIDE=Adwaita-Dark pcmanfm-qt looks OK.
-- Smooth startup works as a showcase.
-- files-workspaces-setup.script does nothing, it should put Thunar up FIXME
-- Provide move-to-container as pull-to-container. Focus by criteria, doesn't have to be on-screen,
-  then move focsed target to container.
-- Alacritty instances can be assigned an app_id at launch. Alacritty supor Ais a must-have because it
-  facilitates writing criteria.
-- Alacritty breaks the $TERM alternative, consider enumerated %T
-- Finally, the workspaces display their tabs corrrectly, in order, according to number of monitors,
-  dynamically. The default monitor ordering is left to right, formerly it was swapped.
-- started to write INSTALL.md
-- Upload necessary scripts asap today (27th) WITHOUT ShellCheck. i Have to break down commits
-  into small pieces because otherwise my PD will encourage me to procrastinate. I can shellcheck
-  later, better with wobbly code than no code.
+In order to get a first alpha release before 31st December 2023, preferably before 24th December 2023. 
+I intend to do one humungous push that covers bugfixes and features that were not in the pre-release.
 
 ## What's in it for me?
 
