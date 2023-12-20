@@ -10,13 +10,12 @@ function show
     # You can edit your Emacs bookmarks so you can bookmark the configuration codebase.
     swaynag -e bottom --button-background 004400 --background 004400 \
             --border-bottom 004400 --border 004400 \
-            --button-text ffeeff --font "DejaVu Sans 10" --text eeffee  -s 'dismiss' \
-            -m "Select a topic with mouse button 1, click X above to close topic." \
+            --button-text ffeeff --font "DejaVu Sans 8" --text eeffee  -s 'dismiss' \
+            -m '!' \
             -b 'exit' 'sway exit' -b 'reload' 'swaymsg reload' \
             -b 'bookmarks' 'swaymsg "exec sudo ydotool key "29:1"  "45:1" "45:0"  "29:0"  "19:1"  "19:0" "38:1"  "38:0" "' \
             -b 'context-sensitive help' 'swaymsg "exec bindings-help.script"' \
-            -b 'about workspaces 2of2' 'ws2overview.script"' \
-            -b 'about workspaces 1of2' 'ws1.overview.script' \
+            -b 'about workspaces' 'workspaces.overview.script' \
             -b 'about menus' 'menus.overview.script' \
             -b 'about keys' 'keys.overview.script' \
             -b 'about modes' 'modes.overview.script' \
