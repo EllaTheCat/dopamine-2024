@@ -3,15 +3,13 @@
 # ------------------------------------------------------------------------------------------------------
 case "$1" in
     (ellathecat)
-        delay=$2
-        ( ep ${delay} &&  desktop-workspace.script 91 /home/ellathecat/Desktop/pavucontrol.desktop 2s) &
-        (sleep ${delay} ; desktop-workspace.script 90 /home/ellathecat/Desktop/qterminal.desktop 10s) &
-        (sleep ${delay} ; desktop-workspace.script 80 /home/ellathecat/Desktop/qterminal.desktop 13s) &
-        (sleep ${delay} ; desktop-workspace.script 70 /home/ellathecat/Desktop/qterminal.desktop 16s) &
-        (sleep ${delay} ; desktop-workspace.script 10 /home/ellathecat/Desktop/qterminal.desktop 19s) &
-        (sleep ${delay} ; desktop-workspace.script 11 /home/ellathecat/Desktop/bpytop.desktop 22s) &
-        (sleep ${delay} ; desktop-workspace.script 14 /home/ellathecat/Desktop/vlc-flatpak.desktop 30s) &
-        ;;
+        # coarse grain common delay
+        delay=${2:-1}
+        # Desktop-workspace scripts are used to launch various singleton apps on dedicated wokspaces.
+        (sleep ${delay} ; desktop-workspace.script 96 /home/ellathecat/Desktop/pavucontrol.desktop 2) &
+        (sleep ${delay} ; desktop-workspace.script 97 /home/ellathecat/Desktop/Alacritty.desktop   8) &
+        (sleep ${delay} ; desktop-workspace.script 95 /home/ellathecat/Desktop/btop.desktop       12) &
+          ;;
     (*)
         speak-ng "Create your $USER case in $(basename $0)"
         ;;

@@ -4,7 +4,7 @@
 
 function ellathecatfn
 {
-    delayX=${2:=7}
+    delayX=${2:-7}
     delay1=${1:-12}
     delay2=$(( delay1+delayX ))
     delay3=$(( delay2+delayX ))

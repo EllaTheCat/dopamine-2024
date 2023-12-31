@@ -7,10 +7,18 @@
 # even when you can only see the workspace tabs on one output, as might be the case when you are using
 # the other outpot fullscreen or the other monitor is being driven from a set-top-box so you can watch
 # the football. You can move a workspace on each invocation. You can fit a hardware dongle to enable the
-# asociated output, and move workspaces in and out like a scratchpad.
+# associated output, and move workspaces in and out like a scratchpad.
+
+# This file akso provides move_workspaceS _to_outputS_using_menu, the S characters are highlighted to
+# emphasise thedifference from move_workspace _to_output_using_menu.  The former encloses the latter
+# inside a loop, such that moving multiple worspaces is a tad morefluid in operation. On passes after
+# the first, it is not necessary to repeatedly specify the output, the latest output to have been
+# specified persists until changed. Throughput aproaches twice the rate without this enancement. Cancel
+# exits the loop
+
 
 # ------------------------------------------------------------------------------------------------------
-# OUTPUT NMMES
+# OUTPUT NAMES
 # (This needs your manual intervention.)
 # PLEASE EDIT HERE TO SUIT YOUR OUTPUT NAMES and also EDIT THE THREE LINES AT THE START OF FUNCTION
 # 'move_workspace_to_output_using_menu' TO USE YOUR OUTPUT NAMES.
@@ -62,7 +70,7 @@ function move_workspace_to_output_using_menu
             (cancel*)
                 # via the menu item
                 done=1
-                return
+                exit 0
                 ;;
             (*)
                 case "${opws:0:2}" in
@@ -74,6 +82,7 @@ function move_workspace_to_output_using_menu
                     (*)
                         # via the escape key
                         done=1
+                        exit 0
                         ;;
                 esac
                 ;;
@@ -87,9 +96,26 @@ function move_workspace_to_output_using_menu
 }
 
 #
+#
+#
+function move_workspaces_to_outputs_using_menu
+{
+    count=1
+    while [ $count -lt 42 ]; do
+        # singular
+        move_workspace_to_output_using_menu
+        sleep 1s
+        $(( count=count+1 ))
+    done
+
+}
+
+#
 # start here.
 #
-move_workspace_to_output_using_menu
+
+move_workspaces_to_outputs_using_menu
+
 #
 # Done
 #
