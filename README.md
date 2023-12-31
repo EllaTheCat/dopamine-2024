@@ -5,7 +5,7 @@ hence that's all it is for the moment, a backup. I want to share my documented c
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
 In order to get a first alpha release before 31st December 2023, preferably before 24th December 2023. 
-I intend to do one humungous push that covers bugfixes and features that were not in the pre-release.
+I present one humungous push that covers bugfixes and features that were not in the pre-release.
 
 ## What's in it for me?
 
