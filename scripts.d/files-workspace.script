@@ -10,9 +10,10 @@
 # $3,$4,$5 optional folders
 
 # DANGER WILL ROBINSON!!!  Something about filemanagers is badly broken as of 2023/11/29. pcmanqt loses
-# things and thunar refuses to start. This leaves pcmanfm-qt. For the pre-release this script assumes
-# pcmanfm-qt. The script has been dumbed down so we can meet the minimum requiremen of launching file
-# manager instances,
+# things and thunar refuses to start. This left pcmanfm-qt for the pre-release.  2024 -01-17: EllaTheCat
+# discovered that the xfce4-terminal launches GNOME favourite Nautilus as file manager. The rofi menus
+# don't offer nautilus (!) so either launch from xfce4-terminal or define some 3xx commads. This script
+# is henceforth using Nautilus.
 # ----------------------------------------------------------------------------------------------------------
 debug=/tmp/debug
 echo '----' > $debug
@@ -49,10 +50,11 @@ case "${1:-55}" in
 esac
 # ------------------------------------------------------------------------------------------------------
 echo "workspace $ws" >> $debug
+sleep "${delay}"
 list=$(swaymsg -t get_workspaces -p | grep -A3 focused )
 echo $list >> $debug
 represent=$(echo $list | grep Represent | sed 's/\(\[\|\]\)/\n/g')
-instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c -E \(pcmanfm-qt\|thunar\|gigolo\))
+instances=$(echo $represent | sed 's/\(\[\|\]\)/\n/g' | grep -c -E \(org.gnome.Nautilus\|pcmanfm-qt\))
 echo "$instances of $maxinstances" >> $debug
 case "$maxinstances" in
     (1|2|3|4|5|6)
@@ -97,7 +99,7 @@ do
     esac
     case "$folder" in
         (file:///*|/*|xyzzy)
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${folder/xyzzy/}"
+            swaymsg "exec gio launch /home/ellathecat/Desktop/org.gnome.Nautilus.desktop ${folder/xyzzy/}"
             sleep 3s
             ### frame=$(( count - instances ))
             ### echo "frame $frame" >> $debug
@@ -110,7 +112,7 @@ do
         (Kaiju|Orion|Titan|Osaka|Tokyo|Wolf359|_*)
             # Use symbolic links found in home folder. Names of disk drives lead underscore optional.
             # The underscore is stripped and prepended so avoid using it inside names.
-            swaymsg "exec gio launch /home/ellathecat/Desktop/pcmanfm-qt.desktop ${HOME}/_${folder/_/}"
+            swaymsg "exec gio launch /home/ellathecat/Desktop/org.gnome.Nautilus.desktop ${HOME}/_${folder/_/}"
             # ---------------------------------------------------------- P
             # Block PQ below is a copy of block AB above.
             # ---------------------------------------------------------- P

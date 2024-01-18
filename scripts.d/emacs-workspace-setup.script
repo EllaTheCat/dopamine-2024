@@ -53,17 +53,12 @@ function ellathecatfn
     delay1=$(( delay0+delayS ))
     delay2=$(( delay1+delayC ))
     delay3=$(( delay2+delayC ))
-    delay4=$(( delay3+delayC ))
-    delay5=$(( delay4+delayC ))
 
-    # Start the server before the clients. 32 34 on left 31 33 35 on right gives interesting
-    # single press jumps with workspace prev/prev_on_output/next/next_on_output.
+    # Start the server before the clients. 31 33 35 on right is sufficient example.
     (sleep "${delay0}" && swaymsg "exec emacsserver-workspace.script 33:1" ) &
     (sleep "${delay1}" && swaymsg "exec emacsclient-workspace.script 31:1" ) &
-    (sleep "${delay2}" && swaymsg "exec emacsclient-workspace.script 32:1" ) &
-    (sleep "${delay3}" && swaymsg "exec emacsclient-workspace.script 34:1" ) &
-    (sleep "${delay4}" && swaymsg "exec emacsclient-workspace.script 35:1" ) &
-    (sleep "${delay5}" && announce_emacs_is_ready ) &
+    (sleep "${delay2}" && swaymsg "exec emacsclient-workspace.script 35:1" ) &
+    (sleep "${delay3}" && announce_emacs_is_ready ) &
 }
 
 #
@@ -77,7 +72,6 @@ function announce_emacs_is_ready
     # /usr/include/linux/input-events.h
     sudo ydotool key 29:1 45:1 45:0 29:0 19:1 19:0 38:1 38:0
 }
-# ------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------------------------------
 #
