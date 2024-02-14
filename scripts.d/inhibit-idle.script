@@ -1,0 +1,23 @@
+#!/bin/bash
+# inhibit_idle.script
+# - A looping video that can be used to hold off the screensaver in swaywm.
+
+# We are not using the usual mpv workspace by default, this has its own dedicated
+# workspace, set yours with a command line argument in $1.
+ws=${1:-08}
+swaymsg "workspace $ws"
+# The delay ensures mpv is ready to be moved to the target workspace.
+# We use a subshell in background because mpv is looping forever.
+(sleep 3 && swaymsg "[app_id=\"mpv\" title=\"iimpv\"] move container to workspace $ws;")&
+# Full paths. New loop syntax. Supply your favourite video here.  The video title
+# is the filname here that must match the criterion in '111-idle.config'.
+if [ $(pgrep -c -f "/home/ellathecat/mpv037/mpv-build/mpv/build/mpv --loop-playlist=inf --no-audio --no-fullscreen /home/ellathecat/Videos/iimpv.mp4") -eq 0 ]; then
+                  /home/ellathecat/mpv037/mpv-build/mpv/build/mpv --loop-playlist=inf --no-audio --no-fullscreen /home/ellathecat/Videos/iimpv.mp4 &
+else
+    pkill -f     "/home/ellathecat/mpv037/mpv-build/mpv/build/mpv --loop-playlist=inf --no-audio --no-fullscreen /home/ellathecat/Videos/iimpv.mp4"
+fi
+# iimpv is not fullscreen to reveal workspace tabs, silent to be unobtrusive,
+# gitignored
+#
+# Done
+#
