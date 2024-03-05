@@ -18,14 +18,15 @@ config.d/.#*
 scripts.d/#*
 scripts.d/.#*
 
-# I used funny file extensions. 
-# These rules only allow .co* and .sc* extensions in config.d and scripts.d respectively. 
+# I used funny file extensions.
+# These rules only allow .co* and .sc* extensions in config.d and scripts.d respectively.
 config.d/*.[a-bd-z]*
 scripts.d/*.[a-rt-z]*
 config.d/*.c[a-np-z]*
 scripts.d/*.s[a-bd-z]*
 
-# WE need an immutable copy of a third party progrsm called autotiling installed as describedd in INSTALL.md but keep it out of the dopamine-2024 repo please.
+# WE need an immutable copy of a third party program called autotiling installed as describedd in INSTALL.md but keep it out of the dopamine-2024 repo please.
 autotiling-3rd-party.script
 
-
+# Personal content. Please supply this. See inhibit-idle.script.
+ellathecat/Videos/iimpv.mp4

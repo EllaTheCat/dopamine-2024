@@ -4,8 +4,25 @@ This repository exists because my top priority is to get an offsite backup of my
 hence that's all it is for the moment, a backup. I want to share my documented configuration soon, so I
 might as well let my alter-ego [Ella the Cat](#about-us) put her marketing hat on to keep you interested.
 
-In order to get a first alpha release before 31st December 2023, preferably before 24th December 2023. 
-I present one humungous push that covers bugfixes and features that were not in the pre-release.
+## April Fool release
+
+Another kitchen sink commit at start of March aimed at a release for April. I've been using the config
+to see what works, broken it, fixed it, and this is now baseline.
+
+- Less is more at startup. As I had hoped, I'm learning the workspaces, 33 for Emacs, the 5xy drop a
+  terminal by workspace feels right, so the '999-$user.config' withers away.
+
+- I have a shiny 3rd monitor, it's detachable, and sits underneath my two side-by-side monitors, so this
+  config is still good for dual monitors only. I've kept the even-&-odd workspaces at left-&-right.
+  I've kept to a side by side panorama for the backdrop.
+
+- The super-fast reaper mode blew up in my face, I'm ready to give it another go.
+
+ - Nautilus (45?) has started to play nice, even the indexing can be usefully applied, so it's default
+   again.
+
+- 60% compact keyboards have arrow keys by default, escaping / and ? is easier, and after much agonising
+  Menu is on left side backslash by default for the foreseable future, right side is still possible.
 
 ## What's in it for me?
 
@@ -14,12 +31,7 @@ computers. I don't want PD to stop me programming. I don't want people to think 
 
 The project is a working configuration for **Sway, a tiling window manager**. It is the capabilities of
 Sway that make it accessible. Sway automates window placement so I need not, but more to the point, when
-PD tremor kicks in, I simply can't manipulate windows without sway or i3. I need my meds and a keyboard
-and automation.  I have direct access to 100 workspaces, and these can be scripted to show various apps
-or documents.  [Autotiling](https://github.com/nwg-piotr/autotiling) is a third party program that
-decides which way to split Sway or i3 windows.
 
-## What's in it for you?
 
 Take whatever you want, but please give me attribution for my work and attribute others for
 theirs. Abide by the LICENSE is all you must do but be kind and considerate please. If this project

@@ -9,7 +9,8 @@ case "${1:-"ellathecat"}" in
     (ellathecat)
         delay=${2:-1}
 
-        files-workspace.script 55:3 $(( delay + 5 ))
+        files-workspace.script 54:3 $(( delay + 5 ))
+        files-workspace.script 55:3 $(( delay + 8 ))
         ;;
     (*)
         speak-ng "Create your $USER case in $(basename $0)"

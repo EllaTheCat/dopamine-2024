@@ -17,9 +17,9 @@ function ellathecatfn
 
     # Visit workspaces 1 through 9 inclusive, in ascending order at runtime, i.e. not necessarily in
     # statement order. This function executes without blocking, leaving a bunch of expiring subshells.
-    (sleep ${delay9} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "10:1" "10:0" )&
-    (sleep ${delay8} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "9:1" "9:0" )&
-    (sleep ${delay7} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "8:1" "8:0" )&
+  # (sleep ${delay9} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "10:1" "10:0" )&
+  # (sleep ${delay8} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "9:1" "9:0" )&
+  # (sleep ${delay7} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "8:1" "8:0" )&
     (sleep ${delay6} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "7:1" "7:0" )&
     (sleep ${delay5} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "6:1" "6:0" )&
     (sleep ${delay4} && sudo ydotool key "59:1" "59:0" "11:1" "11:0" "5:1" "5:0" )&
