@@ -16,7 +16,7 @@ to see what works, broken it, fixed it, and this is now baseline.
   config is still good for dual monitors only. I've kept the even-&-odd workspaces at left-&-right.
   I've kept to a side by side panorama for the backdrop.
 
-- The super-fast reaper mode blew up in my face, I'm ready to give it another go.
+- The super-fast reaper mode blew up in my face, it has been rewritten. Thanks bindsym --no-repeat.
 
  - Nautilus (45?) has started to play nice, even the indexing can be usefully applied, so it's default
    again.
