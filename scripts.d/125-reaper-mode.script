@@ -1,0 +1,44 @@
+#!/bin/bash
+# -*- Mode: Shell-script -*-
+# 125-reaper-mode.config helper script
+#   $1 function $2 arg1 $3 arg2
+# ------------------------------------------------------------------------------------------------------
+
+# These three SHELL variables have the sane values as the CONFIG variables in '109-output.config'.
+first=HDMI-A-1
+second=HDMI-A-2
+third=VGA-1
+
+case "$1" in
+    (mtws)
+        # Empty the current workspace of containers. Stash the current workspace id, advance to the next
+        # workspace, if advance successful request, containers on the now previous workspace be killed.
+        t=$(swaymsg -p -t get_workspaces | grep -E "Workspace [0-9A][0-9] \(focused\)" | awk '{print $2}')
+        s=$(printf "[workspace=\"%s\"] kill" $t)
+        # Why only "next on output"? Using "next" makes the current workspace bounce disconcertingly
+        # around the outputs for e.g. the even-odd assignment.
+        if [ "$(swaymsg "workspace next on output)")"="{ "success": true }" ]; then
+            sleep 0.1s && swaymsg "$(echo $s)"
+        fi
+        ;;
+    (nxws)
+        # Yes, this can be done without a script but that very simplicity facilitates testing and keeps
+        # options open by requiring the case statement.
+        swaymsg "workspace next on output"
+        ;;
+    (mvws)
+        # 3 monitors case for now.
+        case "$2" in
+            ($third)
+                swaymsg [workspace="$first"] move container to workspace $third
+                swaymsg [workspace="$second"] move container to workspace $third
+                ;;
+        esac
+
+esac
+
+#
+# Done
+#
+
+                                                                                                                                                                                                                                                                                                                                                                          esac
