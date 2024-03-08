@@ -6,11 +6,10 @@ case "$1" in
         # coarse grain common delay
         delay=${2:-1}
         # Desktop-workspace scripts are used to launch various singleton apps on dedicated wokspaces.
-        (sleep ${delay} ; desktop-workspace.script 91 /home/ellathecat/Desktop/pavucontrol.desktop 2) &
-       (sleep ${delay} ; desktop-workspace.script 95 /home/ellathecat/Desktop/btop.desktop  8) &
-          ;;
+        (sleep ${delay} ; desktop-workspace.script 01 /home/ellathecat/Desktop/pavucontrol.desktop 2) &
+        (sleep ${delay} ; desktop-workspace.script 02 /home/ellathecat/Desktop/bpytop.desktop  8) &
+        ;;
     (*)
-        speak-ng "Create your $USER case in $(basename $0)"
         ;;
 esac
 #
